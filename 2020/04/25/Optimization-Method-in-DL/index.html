@@ -1,10 +1,12 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
   <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
   <meta charset="utf-8">
   
   <title>Optimization Method in DL | WatsonYang&#39;s Blog</title>
+  
   <meta name="author" content="Watson Yang">
   
   <meta name="description" content="My secret private space.">
@@ -12,26 +14,44 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Optimization Method in DL"/>
-  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+  
+  <meta property="og:title" content="Optimization Method in DL" />
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog" />
 
   
-    <meta property="og:image" content=""/>
+  <meta property="og:image" content="" />
   
 
   <link href="/favicon.png" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml"
+    title="WatsonYang&#39;s Blog" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 
-  
+
   <a href="https://github.com/watsonyanghx" target="_blank">
-    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+    <img style="position: absolute; top: 0; left: 0; border: 0;"
+      src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
   </a>
   <script src="https://use.fontawesome.com/4eb261e456.js"></script>
-<meta name="generator" content="Hexo 4.2.0"></head>
 
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
 
 <body>
   <header id="header" class="inner"><div class="alignleft">
@@ -93,7 +113,7 @@
 <li><p>受到物理学中的动量的启发：之前的梯度可以作为当前梯度的参考。所以，参数的更新不再只是当前的梯度，而是 当前的梯度 对 之前累积的梯度 进行微调之后得到的梯度。更新公式如下：</p>
 </li>
 </ul>
-<p>$$<br>\begin{align<em>}<br>\begin{split}<br>m_t &amp;= \gamma \cdot m_{t-1} + \nabla_\theta J( \theta) \<br>\theta_{t+1} &amp;= \theta_{t} - \eta \cdot m_t<br>\end{split}<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align*}<br>\begin{split}<br>m_t &amp;= \gamma \cdot m_{t-1} + \nabla_\theta J( \theta) \\<br>\theta_{t+1} &amp;= \theta_{t} - \eta \cdot m_t<br>\end{split}<br>\end{align*}<br>$$</p>
 <p>其中 $γ$ 为动量参数，$η$ 为学习率。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">momentum</span><span class="params">(x_start, step, g, discount = <span class="number">0.7</span>)</span>:</span>   </span><br><span class="line">    x = np.array(x_start, dtype=<span class="string">'float64'</span>)</span><br><span class="line">    pre_grad = np.zeros_like(x)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">        grad = g(x)</span><br><span class="line">        pre_grad = pre_grad * discount + grad</span><br><span class="line">        x -= pre_grad * step</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">print</span> <span class="string">'[ Epoch &#123;0&#125; ] grad = &#123;1&#125;, x = &#123;2&#125;'</span>.format(i, grad, x)</span><br><span class="line">        <span class="keyword">if</span> abs(sum(grad)) &lt; <span class="number">1e-6</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
 
@@ -130,7 +150,7 @@
 <li><code>SGD-Momentum</code> 中，之前积累的动量并没有直接改变当前的梯度，<code>Nesterov</code> 的改进就是让之前的动量直接影响当前的动量。这样做的好处是：。更新公式如下：</li>
 </ul>
 <p>$$</p>
-<p>\begin{align<em>}<br>\begin{split}<br>m_t &amp;= \gamma \cdot m_{t-1} + \nabla_\theta J(\theta_{t} - \eta \cdot m_{t-1}) \<br>\theta_{t+1} &amp;= \theta_{t} - \eta \cdot m_t<br>\end{split}<br>\end{align</em>}</p>
+<p>\begin{align*}<br>\begin{split}<br>m_t &amp;= \gamma \cdot m_{t-1} + \nabla_\theta J(\theta_{t} - \eta \cdot m_{t-1}) \\<br>\theta_{t+1} &amp;= \theta_{t} - \eta \cdot m_t<br>\end{split}<br>\end{align*}</p>
 <p>$$</p>
 <ul>
 <li><p>步骤</p>
@@ -166,7 +186,7 @@
 <li><p>并没有使用 Momentum，只是对学习率进行了缩放。在 Adagrad 的更新规则中，学习率 η 会随着每次迭代而根据历史梯度的变化而变化。</p>
 </li>
 </ul>
-<p>$$<br>\begin{align<em>}<br>\begin{split}<br>v_t &amp;= v_{t-1} + g_{t,i}^2 \<br>\theta_{t+1,i} &amp;= \theta_{t,i} - \frac{\eta}{\sqrt{v_t+\epsilon}}·g_{t,i}<br>\end{split}<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align*}<br>\begin{split}<br>v_t &amp;= v_{t-1} + g_{t,i}^2 \\<br>\theta_{t+1,i} &amp;= \theta_{t,i} - \frac{\eta}{\sqrt{v_t+\epsilon}}·g_{t,i}<br>\end{split}<br>\end{align*}<br>$$</p>
 <p>$ v_t \in {\Bbb R}^{d \times d} $ 是一个对角矩阵，每个对角线位置 $i,i$ 的值累加到 $t$ 次迭代的对应参数 $θ_i$ 梯度平方和。$\epsilon$ 是平滑项，防止除零操作，一般取值 $1e−8$ 。为什么分母要进行平方根的原因是去掉平方根操作算法的表现会大打折扣。</p>
 <ul>
 <li><p>分母作为 Regularizer 项的工作机制如下：</p>
@@ -189,7 +209,7 @@
 </li>
 </ul>
 <h1 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h1><p>与 AdaGrad 只有一处不同：不是简单的计算之前不同迭代步骤的梯度平方和，而是计算：上一个时刻的加权平均和 和 这个时刻的梯度平方和 的 加权和。（这一点和 Adadelta 很像：不累积全部历史梯度，而只关注过去一段时间窗口的下降梯度。(<a href="https://zhuanlan.zhihu.com/p/32230623" target="_blank" rel="noopener">Adam那么棒，为什么还对SGD念念不忘 (1) —— 一个框架看懂优化算法</a>）</p>
-<p>$$<br>\begin{align<em>}<br>\begin{split}<br>v_t &amp;= \gamma \cdot v_{t-1} + (1 -\gamma) \cdot g_{t,i}^2 \<br>\theta_{t+1,i} &amp;= \theta_{t,i} - \frac{\eta}{\sqrt{v_t+\epsilon}}·g_{t,i}<br>\end{split}<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align*}<br>\begin{split}<br>v_t &amp;= \gamma \cdot v_{t-1} + (1 -\gamma) \cdot g_{t,i}^2 \\<br>\theta_{t+1,i} &amp;= \theta_{t,i} - \frac{\eta}{\sqrt{v_t+\epsilon}}·g_{t,i}<br>\end{split}<br>\end{align*}<br>$$</p>
 <p>所以，当 $ g{t,i}^2 &lt; v{t-1} $ 的时候，$ v_t $ 将变小，这样就不会出现 AdaGrad 中 $ v_t $ 持续变大，导致后来无法学习的现象。</p>
 <ul>
 <li><p><a href="https://zhuanlan.zhihu.com/p/34230849" target="_blank" rel="noopener">【优化算法】一文搞懂RMSProp优化算法</a></p>
@@ -201,7 +221,7 @@
 <p>(1) Learning Rate 只會隨著時間而一直遞減下去</p>
 <p>(2) \triangle x 與 x 的單位不同</p>
 <p>更新公式：</p>
-<p>$$<br>\begin{align<em>}<br>\begin{split}<br>\theta_{t+1} &amp;= \theta_t + \triangle\theta_t \<br>&amp;= \theta_t - \frac{RMS[\triangle \theta]<em>{t-1}}{RMS[g]_t} \cdot g_t \<br>RMS[g]_t &amp;= \sqrt{E[g^2]_t + \epsilon} \<br>RMS[\triangle \theta]_t &amp;= \sqrt{E[\triangle \theta^2]_t + \epsilon} \<br>E[g^2]_t &amp;= \gamma \cdot E[g^2]</em>{t-1} + (1-\gamma) \cdot g^2_t \<br>E[\triangle\theta_t^2]<em>t &amp;= \gamma \cdot E[\triangle\theta_t^2]</em>{t-1} + (1-\gamma) \cdot \triangle\theta_t^2<br>\end{split}<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align*}<br>\begin{split}<br>\theta_{t+1} &amp;= \theta_t + \triangle\theta_t \\<br>&amp;= \theta_t - \frac{RMS[\triangle \theta]_{t-1}}{RMS[g]_t} \cdot g_t \\<br>RMS[g]_t &amp;= \sqrt{E[g^2]_t + \epsilon} \\<br>RMS[\triangle \theta]_t &amp;= \sqrt{E[\triangle \theta^2]_t + \epsilon} \\<br>E[g^2]_t &amp;= \gamma \cdot E[g^2]_{t-1} + (1-\gamma) \cdot g^2_t \\<br>E[\triangle\theta_t^2]_t &amp;= \gamma \cdot E[\triangle\theta_t^2]_{t-1} + (1-\gamma) \cdot \triangle\theta_t^2<br>\end{split}<br>\end{align*}<br>$$</p>
 <ul>
 <li><p>特点</p>
 <ul>
@@ -229,7 +249,7 @@
 </li>
 </ul>
 <h1 id="Adam-Adaptive-Moments"><a href="#Adam-Adaptive-Moments" class="headerlink" title="Adam (Adaptive Moments)"></a>Adam (Adaptive Moments)</h1><p>引入 <code>momentum</code> 。</p>
-<p>$$<br>\begin{align<em>}<br>\begin{split}<br>m_t &amp;= beta_1 * m_{t-1} + (1 - beta_1) * g \<br>m_t &amp;= m_t / (1-beta1^t) \<br>v_t &amp;= beta_2 * v_{t-1} + (1 - beta_2) * g^2 \<br>v_t &amp;= v_t / (1-beta2^t) \<br>x_{t+1} &amp;= x_t - lr_t * m_t / (\sqrt{v_t} + \epsilon) \<br>\end{split}<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align*}<br>\begin{split}<br>m_t &amp;= beta_1 * m_{t-1} + (1 - beta_1) * g \\<br>m_t &amp;= m_t / (1-beta1^t) \\<br>v_t &amp;= beta_2 * v_{t-1} + (1 - beta_2) * g^2 \\<br>v_t &amp;= v_t / (1-beta2^t) \\<br>x_{t+1} &amp;= x_t - lr_t * m_t / (\sqrt{v_t} + \epsilon) \\<br>\end{split}<br>\end{align*}<br>$$</p>
 <p>在初期 $m_t = 0, v_t=0$ ，这个估计是有问题的。因此需要进行误差修正。</p>
 <h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><p>Adadelta, RMSProp, Adam 由于使用的是过去二阶动量的加权平均和，所以不能保证学习率单调递减，如果数据变化比较大，会出现学习率一会大，一会小的现象，导致学习很不稳定。这也是 Adam 被批评的一个原因。（不过很多文献中指出：Adam 最后的步长往往不是过大而是过小了。事实上，[3] 中的实验也证明了 Adam 训练末期过小的步长是导致泛化性能差的重要原因。Adam 究竟还有什么问题 —— 深度学习优化算法概览(二)）</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
