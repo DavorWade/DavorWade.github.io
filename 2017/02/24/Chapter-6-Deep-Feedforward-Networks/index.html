@@ -1,0 +1,418 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Chapter 6 Deep Feedforward Networks | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Chapter 6 Deep Feedforward Networks"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-02-24T12:26:23.000Z"><a href="/2017/02/24/Chapter-6-Deep-Feedforward-Networks/">2017-02-24</a></time>
+      
+      
+  
+    <h1 class="title">Chapter 6 Deep Feedforward Networks</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>首先，介绍了<code>Deep feedforward networks</code>的概念：之所以称为<code>networks</code>，是因为它们是通过把不同的函数组合起来的形式表达的（typically represented by composing together many different functions）；<code>feedforward</code>是因为 no feedback connections in which outputs of the model are fed back into itself（）。</p>
+<p>然后，介绍了<code>output layer</code>与<code>hidden layer</code>。training examples 决定了的<code>output layer</code>的行为：输出要接近目标值<code>y</code>。但是它并没有定义<code>hidden layer</code>的行为，不过 learning algorithm 则必须决定如何使用这些<code>hidden layer</code>来完成对函数的逼近。</p>
+<p>接着，引入了非线性函数的概念（不是<code>activation function</code>，是指最终学出来的那个函数），指出得到非线性函数的方法有3种：</p>
+<ol>
+<li><p>使用一个比较 generic 的函数，比如<code>RBF kernel</code>，但最终在 test dataset 上的效果非常不好（generalization to the test set often remains poor）。</p>
+</li>
+<li><p>使用 domain knowledge 人工指定，但是太费时费力。</p>
+</li>
+<li><p>算法自己学习，这种方法既可以保证第一种方法的 generic 的性质，又能保证第二种 domain knowledge 的优点（人为的设置一些biased）。</p>
+</li>
+</ol>
+<a id="more"></a>
+
+<p>最后，介绍了本章的主要内容。</p>
+<h1 id="6-1-Example-Learning-XOR"><a href="#6-1-Example-Learning-XOR" class="headerlink" title="6.1 Example: Learning XOR"></a>6.1 Example: Learning XOR</h1>  <center>
+  <img src="https://www.tuchuang001.com/images/2017/03/14/QQ20170314174339.png" width=60% height=60% alt="Solving the XOR problem by learning a representation" border="0" />
+  </center>
+
+<ul>
+<li><p>首先，举<code>XOR</code>的例子说明了使用传统的<code>linear model</code>不能完成这个任务，引出可以使用<code>neural networks</code>完成这项任务。因为层与层之间需要做非线性的变换，否则还是<code>linear model</code>，这就引出了<code>activation function</code>。</p>
+<p>所以<code>activation function</code>的作用就是：为<code>neural networks</code>引入<strong>非线性元素</strong>。</p>
+</li>
+<li><p>接着，指出上面的学习例子比较简单，现实中的任务比较复杂，模型参数的数量非常多，需要一个有效的算法来学习，从而引出了下节内容。</p>
+</li>
+</ul>
+<h1 id="6-2-Gradient-Based-Learning"><a href="#6-2-Gradient-Based-Learning" class="headerlink" title="6.2 Gradient-Based Learning"></a>6.2 Gradient-Based Learning</h1><ul>
+<li><p><code>neural networks</code>与<code>linear model</code>的<strong>最大区别</strong>是：由于<code>activation function</code>的原因，会使得大多数的<code>cost function</code>变成非凸的。通常使用<code>Gradient Descent</code>的方法，进行最优化求解。</p>
+</li>
+<li><p>对于<code>feedforward networks</code>，<code>parameters</code>的初始化很重要，通常把所有的<code>weights</code>都初始化为 small random values，把<code>biase</code>初始化为 0 或 small positive values。</p>
+</li>
+<li><p>为了应用<code>gradient descent</code>，必须要定义一个<code>cost function</code>，而<code>cost function</code>的具体使用和形式又和<code>output units</code>相关，所以分 2 小节进行讲解。</p>
+</li>
+</ul>
+<h2 id="6-2-1-Cost-Functions"><a href="#6-2-1-Cost-Functions" class="headerlink" title="6.2.1 Cost Functions"></a>6.2.1 Cost Functions</h2><ul>
+<li><p>大多数时候<code>cost function</code>使用<code>cross-entropy</code>。（<font color='red'>有个问题不明白：回归问题大多数使用<code>MSE</code>？</font>）</p>
+</li>
+<li><p>通常时候会加上一个<code>regularization term</code>（通常是<code>weight decay</code>，直接作用在<code>cost function</code>上）。</p>
+</li>
+</ul>
+<h3 id="6-2-1-1-Learning-Conditional-Distributions-with-Maximum-Likelihood"><a href="#6-2-1-1-Learning-Conditional-Distributions-with-Maximum-Likelihood" class="headerlink" title="6.2.1.1 Learning Conditional Distributions with Maximum Likelihood"></a>6.2.1.1 Learning Conditional Distributions with Maximum Likelihood</h3><ul>
+<li><p>Most modern neural networks are trained using maximum likelihood. This means that the cost function is simply the negative log-likelihood, equivalently described as the cross-entropy between the training data and the model distribution. </p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/16/QQ20170316004914.png" alt="Negative log-likelihood" border="0" />
+</center>
+</li>
+<li><p>虽然<code>cost function</code>大多是<code>cross-entropy</code>，但它的具体形式也会随着具体模型的变化而变化。</p>
+</li>
+<li><p>通常使用<code>maximum likelihood estimation</code>的方法定义<code>object function</code>；使用<code>gradient descent</code>的方法求解使得<code>object function</code>取得最小值的<code>parameters</code>；使用<code>BP</code>的方法更新<code>parameters</code></p>
+</li>
+<li><p>相对于<code>MSE</code>，使用<code>log-likelihood</code>的优点有 2 个：</p>
+<ul>
+<li><p>把<code>cost function</code>中的乘法操作变成加法操作。</p>
+</li>
+<li><p>把<code>e^x</code>重新转化为<code>x</code>。</p>
+</li>
+</ul>
+<p>上面两点有效的可以避免<code>cost function</code>在 extreme large 或 extreme negative 的时候梯度消失。</p>
+</li>
+</ul>
+<h3 id="6-2-1-2-Learning-Conditional-Statistics"><a href="#6-2-1-2-Learning-Conditional-Statistics" class="headerlink" title="6.2.1.2 Learning Conditional Statistics"></a>6.2.1.2 Learning Conditional Statistics</h3><p><font color='red'>没看懂 -_- </font></p>
+<ul>
+<li><p>大概意思是使用<code>MSE</code>可能会使得训练速度很慢（梯度消失），这是<code>cross-entropy</code>之所以很流行的原因。可以看这个博客，写的很好。</p>
+<ul>
+<li><a href="http://neuralnetworksanddeeplearning.com/chap3.html" target="_blank" rel="noopener">Improving the way neural networks learn</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="6-2-2-Output-Units"><a href="#6-2-2-Output-Units" class="headerlink" title="6.2.2 Output Units"></a>6.2.2 Output Units</h2><p>这里主要是说<code>cost function</code>的选取与的<code>output units</code>选取有很大的关系，<code>output units</code>的不同，也会导致<code>cost function</code>具体形式的不同，即使是同一种<code>cost function</code>。</p>
+<p>然后，讲了 4 中不同形式的<code>output units</code>，本小节的主要内容就是对这几种不同形式的<code>output units</code>做介绍。</p>
+<h3 id="6-2-2-1-Linear-Units-for-Gaussian-Output-Distributions"><a href="#6-2-2-1-Linear-Units-for-Gaussian-Output-Distributions" class="headerlink" title="6.2.2.1 Linear Units for Gaussian Output Distributions"></a>6.2.2.1 Linear Units for Gaussian Output Distributions</h3><ul>
+<li><font color='red'>是说最后的<code>output layer</code>如果没有使用任何<code>activation function</code>的时候，linear units 不会 saturates，所以<code>cost function</code>可以使用<code>MSE</code>？但是如果隐藏层使用了<code>sigmoid</code>，当<code>sigmoid</code> saturates 的时候，<code>cost function</code>不也是会 saturates 吗？</font></li>
+</ul>
+<h3 id="6-2-2-2-Sigmoid-Units-for-Bernoulli-Output-Distributions"><a href="#6-2-2-2-Sigmoid-Units-for-Bernoulli-Output-Distributions" class="headerlink" title="6.2.2.2 Sigmoid Units for Bernoulli Output Distributions"></a>6.2.2.2 Sigmoid Units for Bernoulli Output Distributions</h3><ul>
+<li><p>对于<strong>二元分类</strong>问题，就可以把这个看成是一个 Bernoulli 试验，如果在最后的<code>output layer</code>使用了<code>sigmoid</code>，记输出正确的概率是<code>p</code>，那么错误的概率就是<code>1-p</code>。</p>
+</li>
+<li><p><code>sigmoid</code>会在输入 very negative 的时候 saturates to 0，在输入 very positive 的时候 saturates to 1 。如果使用<code>MSE</code>，当<code>sigmoid</code> saturates 的时候，<code>MSE</code>也会 saturates。</p>
+</li>
+<li><p>如果最后一层的<code>output layer</code>使用了<code>sigmoid</code>，最好使用<code>maximum likelihood</code>的方法进行最优化求解。也就是说使用概率的方式(<code>log-likelihood</code>形式的<code>cost function</code>) –&gt; 也就是说不使用<code>MSE</code>。</p>
+</li>
+</ul>
+<h3 id="6-2-2-3-Softmax-Units-for-Multinoulli-Output-Distributions"><a href="#6-2-2-3-Softmax-Units-for-Multinoulli-Output-Distributions" class="headerlink" title="6.2.2.3 Softmax Units for Multinoulli Output Distributions"></a>6.2.2.3 Softmax Units for Multinoulli Output Distributions</h3><ul>
+<li><p>对于<strong>多元分类</strong>问题，就可以把这个看成是一个 Multinoulli 试验，这样就可以在最后的<code>output layer</code>使用<code>softmax</code>，直接得到各个分类的概率。</p>
+</li>
+<li><p>softmax functions can be used <strong>inside the model</strong> itself, if we wish the model to choose between one of n different options for some <strong>internal variable</strong>. 比如<code>Attention model</code>中的权重。</p>
+</li>
+<li><p><code>softmax</code>可以看成是上面的一种 generalization（一般化），因为<code>sigmoid</code>可以看成是一种二项分布（<code>p(y)=a</code>, <code>p(1-y)=1-a</code>），<code>softmax</code>可以看成是一种多项式分布（经<code>softmax</code>操作后，输出的和为<code>1</code>）。</p>
+</li>
+<li><p>另外，这里更加清楚的解释了为什么要使用<code>log-likelihood</code>形式的<code>cost function</code>：因为<code>softmax</code>中含有<code>e^x</code>，当 x 极小的时候，也会出现梯度消失的现象。而使用<code>log-likelihood</code>形式的<code>cost function</code>就可以很好的避免这种现象的发生。</p>
+</li>
+</ul>
+<h3 id="6-2-2-4-Other-Output-Types"><a href="#6-2-2-4-Other-Output-Types" class="headerlink" title="6.2.2.4 Other Output Types"></a>6.2.2.4 Other Output Types</h3><p><font color='red'>没看这一小节 </font></p>
+<h1 id="6-3-Hidden-Units"><a href="#6-3-Hidden-Units" class="headerlink" title="6.3 Hidden Units"></a>6.3 Hidden Units</h1><p>这里主要讲了各个<code>activation function</code>的定义、变种形式以及优缺点。</p>
+<ul>
+<li><p><code>activation function</code>都是以<code>element-wise</code>的形式作用于<code>output</code>。</p>
+</li>
+<li><p>It is usually impossible to predict in advance which will work best。</p>
+</li>
+</ul>
+<h2 id="6-3-1-Rectified-Linear-Units-and-Their-Generalizations"><a href="#6-3-1-Rectified-Linear-Units-and-Their-Generalizations" class="headerlink" title="6.3.1 Rectified Linear Units and Their Generalizations"></a>6.3.1 Rectified Linear Units and Their Generalizations</h2><ul>
+<li><p>有的<code>activation function</code>可能<strong>不是</strong>处处可微，比如<code>ReLU</code>在 0 处就不可微。此时通常返回它左、右（偏）导数的<strong>其中一个</strong>（如果是 0 的话，通常不会返回0，而是返回一个<strong>接近 0 的数</strong>）。</p>
+</li>
+<li><p><code>ReLU</code>也有缺点： they cannot learn via gradientbased methods on examples for which their activation is zero。</p>
+</li>
+<li><p><code>ReLU</code>有几种比较重要的变种形式，可以看书中的内容。</p>
+</li>
+<li><p><code>Maxout</code>也是<code>ReLU</code>的一个变种形式，书中介绍了它的优点，可以参考书中的内容，也可以看这里的笔记：<a href="https://watsonyanghx.github.io/2017/03/10/Maxout-Networks-Network-in-Network/">Maxout Networks &amp; Network in Network</a></p>
+</li>
+</ul>
+<h2 id="6-3-2-Logistic-Sigmoid-and-Hyperbolic-Tangent"><a href="#6-3-2-Logistic-Sigmoid-and-Hyperbolic-Tangent" class="headerlink" title="6.3.2 Logistic Sigmoid and Hyperbolic Tangent"></a>6.3.2 Logistic Sigmoid and Hyperbolic Tangent</h2><ul>
+<li><p>Their use as <strong>output units</strong> is compatible with the use of gradient-based learning when an <strong>appropriate cost function</strong> can <strong>undo the saturation</strong> of the sigmoid in the output layer.</p>
+</li>
+<li><p><code>sigmoid</code>和<code>tanh</code>有着很强的联系：tanh(z) = 2sigmoid(2z) - 1，但<code>tanh</code>有着比<code>sigmoid</code>更好的特性（tanh(0) = 0），所以在必须要使用<code>sigmoid</code>的时候，最好使用<code>tanh</code>代替。</p>
+</li>
+<li><p><code>sigmoid</code>在很多的时候还是很有用的，比如<code>RNN/LSTM</code>中的<code>gate unit</code>、<code>probabilistic models</code>以及<code>autoencoders</code>（Recurrent networks, many probabilistic models, and some autoencoders have additional requirements that rule out the use of piecewise linear activation functions and make sigmoidal units more appealing despite the drawbacks of saturation.）。</p>
+</li>
+</ul>
+<h2 id="6-3-3-Other-Hidden-Units"><a href="#6-3-3-Other-Hidden-Units" class="headerlink" title="6.3.3 Other Hidden Units"></a>6.3.3 Other Hidden Units</h2><p>这节主要介绍了一些其它的<code>activation function</code>，这些<code>activation function</code>和前面的效果都差不多，在某些特定的情况下可能取得更好的效果。</p>
+<ul>
+<li><p>可以通过把一个使用<code>activation function</code>的 layer 分成 2 个 layer：一个 layer 不使用任何<code>activation function</code>（相当于使用 identity function as the activation function） + 一个 layer 使用<code>activation function</code>。这样做的好处是可以减少<code>parameters</code>（具体可见195页）。</p>
+</li>
+<li><p><code>softmax function</code>通常作为 output units，但有时也可以作为<code>hidden units</code>，比如<code>Attention model</code>中的权重。（These kinds of hidden units are usually only used in more advanced architectures that explicitly learn to manipulate memory, described in section 10.12.）。</p>
+</li>
+</ul>
+<h1 id="6-4-Architecture-Design"><a href="#6-4-Architecture-Design" class="headerlink" title="6.4 Architecture Design"></a>6.4 Architecture Design</h1><p>这里讨论了<code>Neural Networks</code>的 Architecture 问题，主要是<code>depth</code>和<code>width</code>的设计问题。</p>
+<p>书中多次强调要使用<font color='red'>深层</font>的网络，然后使用<code>regularization</code>减轻<code>overfitting</code>（<code>CS231n</code>课程中也有强调这一点）。</p>
+<h2 id="6-4-1-Universal-Approximation-Properties-and-Depth"><a href="#6-4-1-Universal-Approximation-Properties-and-Depth" class="headerlink" title="6.4.1 Universal Approximation Properties and Depth"></a>6.4.1 Universal Approximation Properties and Depth</h2><ul>
+<li><p>任何<code>Borel measurable</code>的函数都可以通过<code>Neural Networks</code>表示出来（必须含有<code>non-linear</code>的<code>activation function</code>）。</p>
+</li>
+<li><p>虽然只有 1 个<code>hidden layer</code>的<code>Neural Networks</code>就足够用来拟合所有的函数，但是<strong>每个</strong><code>hidden layer</code>可能需要设定非常多的<code>hidden units</code>（exponential number of hidden units），最终可能无法学习到合适的<code>parameters</code>来表达这个函数，generalization 也不会好（对浅层的<code>Neural Networks</code>也是这个道理）。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/16/QQ20170316123651.png" alt="An intuitive, geometric explanation of the exponential advantage of deeper rectifier networks" border="0" />
+</center>
+
+<p>从上图可以看出，</p>
+</li>
+<li><p>所以，通常还是使用多层的<code>Neural Networks</code>（更少<code>hidden units</code>与<code>parameters</code>、更好的学习和 generalization 能力）（Empirically, <strong>greater depth</strong> does seem to result in <strong>better generalization</strong> for a wide variety of tasks）。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/14/QQ20170314180816.png" width=60% height=60% alt="Empirical results showing that deeper networks generalize better when used to transcribe multi-digit numbers from photographs of addresses" border="0" />
+</center>
+</li>
+<li><p>网络越深，表达能力就越强。如果用浅层的网络，为了达到同等好的效果，则需要增加每层网络的<code>hidden units</code>个数，但此时会增加<code>overfitting</code>的概率（202页的图对比了 depth 和 width 对网络的影响，就是下图）。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/14/QQ20170314175228.png" alt="Deeper models tend to perform better" border="0" />
+</center>
+</li>
+<li><p>上图主要讲的内容可以概括为下面几点（具体可以参看 202 页）：</p>
+<ul>
+<li><p>只增加网络每层的 parameters 数量，而不增加网络的 depth，效果并不会有很好的提升，并且此时更容易过拟合。</p>
+</li>
+<li><p>层数越深，可以学习到的 features 越细，feature 的 representation 也就越 simple。</p>
+</li>
+<li><p>层数浅的时候，为了提升效果可能采取增加的方式，但这样容易过拟合。加深层数可以在一定程度上减轻过拟合，但也会产生过拟合（太多，training dataset过小，训练周期太长等）</p>
+</li>
+<li><p>总结：使用层数深的网络，然后使用正则化等方法，减轻过拟合。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-4-2-Other-Architectural-Considerations"><a href="#6-4-2-Other-Architectural-Considerations" class="headerlink" title="6.4.2 Other Architectural Considerations"></a>6.4.2 Other Architectural Considerations</h2><ul>
+<li>强调了应该根据具体的任务选择不同的<code>NN Architecture</code>，比如<code>CV</code>就使用<code>CNN</code>，<code>Time Series</code>就使用<code>RNN</code>。同时，还需要考虑内部细节（是否使用<code>skip connections</code>），具体的结构（比如<code>CNN</code>又有<code>FCN</code>、<code>Deconvolution CNN</code>与<code>ResNet</code>等）。</li>
+</ul>
+<h1 id="6-5-Back-Propagation-and-Other-Differentiation-Algorithms"><a href="#6-5-Back-Propagation-and-Other-Differentiation-Algorithms" class="headerlink" title="6.5 Back-Propagation and Other Differentiation Algorithms"></a>6.5 Back-Propagation and Other Differentiation Algorithms</h1><ul>
+<li><p>主要介绍<code>BP</code>算法，算法实现时的<code>computation graph</code>、<code>chain rules</code>等。</p>
+</li>
+<li><p>推荐参考这些博客：</p>
+<ul>
+<li><p><a href="https://cs231n.github.io/optimization-2/" target="_blank" rel="noopener">backprop notes</a></p>
+</li>
+<li><p><a href="https://colah.github.io/posts/2015-08-Backprop/" target="_blank" rel="noopener">Calculus on Computational Graphs: Backpropagation</a></p>
+</li>
+<li><p><a href="http://neuralnetworksanddeeplearning.com/chap2.html" target="_blank" rel="noopener">How the backpropagation algorithm works</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="6-6-Historical-Notes"><a href="#6-6-Historical-Notes" class="headerlink" title="6.6 Historical Notes"></a>6.6 Historical Notes</h1><p>主要介绍<code>feedforward networks</code>的发展历史。</p>
+<p>大家也都知道<code>Neural Networks</code>在很早之前就提出来了，但是一直没有发展起来（主要是因为硬件的计算能力不够，大家也都知道的），最近又火起来的原因主要是因为计算能力的提高（<code>GPU</code>的使用）。</p>
+<p>那么现在<code>Neural Networks</code>的与之前的<code>Neural Networks</code>有什么区别呢？答案是：core ideas 并没有太大的区别，还是使用的<code>Backpropagation</code>和<code>Gradient Descent</code>的方法进行学习和优化。</p>
+<p>但是还是有着一些 improvements 的：</p>
+<ol>
+<li><p>更大的数据集。这使得 statistical generalization 变得容易。</p>
+</li>
+<li><p>正是由于计算能力的提高，使得<code>Neural Networks</code>可以变得 larger 与 deeper。</p>
+</li>
+<li><p>一些 algorithmic changes 也提高了<code>Neural Networks</code>的 performance：</p>
+<ul>
+<li><p>用<code>cross-entropy family of loss functions</code>代替<code>MSE</code>。</p>
+</li>
+<li><p>用<code>ReLU</code>代替<code>sigmoid</code>。</p>
+<p>其实<code>ReLU</code>也在很早之前就提出了，一是因为它在 0 处是不可微的，<code>ReLU</code>被很多人否定；二是由于当时的<code>Neural Networks</code>比较小，<code>sigmoid</code>在小型<code>Neural Networks</code>上的效果又比<code>ReLU</code>好，所以<code>ReLU</code>就被<code>sigmoid</code>代替了。</p>
+<p>现在又开始使用<code>ReLU</code>是因为随着<code>Neural Networks</code>的变大，<code>sigmoid</code>出现了梯度消失的问题，使得学习速度变慢；同时<code>overfit</code>的问题也出现了，而<code>ReLU</code>可以很好的解决这两个问题。</p>
+</li>
+<li><p>其它的一些改进，比如网络结构的改变：<code>RCNN</code>、<code>FCNN</code>以及<code>ResNet</code>等（书中没有提及这个）。</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Deep-Learning/">Deep Learning</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

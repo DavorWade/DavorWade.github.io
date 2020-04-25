@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Maxout Networks &amp; Network in Network | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Maxout Networks &amp; Network in Network"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-03-10T05:41:29.000Z"><a href="/2017/03/10/Maxout-Networks-Network-in-Network/">2017-03-10</a></time>
+      
+      
+  
+    <h1 class="title">Maxout Networks &amp; Network in Network</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Maxout-Networks"><a href="#Maxout-Networks" class="headerlink" title="Maxout Networks"></a>Maxout Networks</h2><h3 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h3><p><code>dropout</code>是一种 regularization 的方法，主要作用是用来减轻过拟合现象。实现方式是：以一定的概率，随机的把<code>hidden units</code>的输出值设成<code>0</code>，也就是随机的让某些<code>hidden units</code>失活，此时就相当于是一种集成模型的训练。</p>
+<p>实验证实当网络比较深的时候，使用<code>dropout</code>能够很好的提升网络的 generalization 能力。</p>
+<p>作者就想：如果不只是单单的把它作为一种提升模型性能的工具，而是直接应用到网络结构的内部，是不是能够更好的提高网络的性能呢？</p>
+<p>注意：<code>dropout</code>只是一种 regularizer，而<code>maxout</code>是一种网络结构。</p>
+ <a id="more"></a>
+
+<h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><p>每个隐藏层的<code>hidden units</code>与前一层的<code>hidden units</code>连接的时候，加入一个有<code>k</code>（是个超参数）个<code>hidden units</code>的隐藏层，一般叫做“隐隐藏层”，示意图如下图所示。</p>
+  <center>
+  <img src="https://www.tuchuang001.com/images/2017/03/10/14a8a6.jpg" width=50% height=50% alt="maxout" border="0" />
+  </center>
+
+<p>对<code>Fully connected layer</code>直接取 max 就可以；对<code>CNN</code>使用<code>Cross chanel pooling</code>的方式完成，这也是它与其它激活函数不同的地方。</p>
+<p>比如：<code>ReLU</code>使用的 max(x,0) 是对每个通道的特征图的每一个单元执行的与<code>0</code>比较最大化操作；而<code>maxout</code>是对每个通道的特征图在通道的维度上执行最大化操作（Cross chanel pooling）。</p>
+<h3 id="Activation-Function-Maxout-unit"><a href="#Activation-Function-Maxout-unit" class="headerlink" title="Activation Function: Maxout unit"></a>Activation Function: Maxout unit</h3><p>从这种角度来看，它就是一种新的<code>activation function</code>，作者叫它<code>maxout unit</code></p>
+<ol>
+<li><p>Maximum operation ensure non-linear property</p>
+<p> 因为是 max 操作，可以保证非线性。</p>
+</li>
+<li><p>Approximate any convex function</p>
+<p> 同时可以拟合任何的凸函数，论文中用数学的方法给出了证明。</p>
+<p> 不过它只能拟合凸函数，算是一个弊端，后面的<code>Network in Network</code>对这里做了改进</p>
+</li>
+<li><p>Filter can be trained to learn</p>
+<p> 每个<code>hidden units</code>可以学习各自的<code>activation function</code>形式。</p>
+</li>
+</ol>
+<h3 id="Comparison-to-rectifiers"><a href="#Comparison-to-rectifiers" class="headerlink" title="Comparison to rectifiers"></a>Comparison to rectifiers</h3><ul>
+<li><p>接着，作者在 4 个不同的数据集上做了 Experiments，都取得了 state-of-the-art 或者相当的效果，Experiments 内容就不讲了，具体细节可以看paper，并且paper中讲的也比较详细。</p>
+</li>
+<li><p><code>ReLU</code>已经那么好了，为什么还要用，或者说还要有<code>maxout</code>呢？</p>
+<p>原因要是因为<code>ReLU</code>有一些缺点，而<code>maxout</code>正好解决了，这也是<code>maxout</code>的优势。</p>
+<p>缺点是：</p>
+<p>Kaiming He 有一篇 paper 讲的就是<code>ReLU</code>，他那篇 paper 的 motivation 就是：大家都爱用<code>ReLU</code>，效果也很好，那它就没有毛病吗？有的话，如何改进。不过他那篇只是对<code>ReLU</code>的形式进行改进。</p>
+</li>
+<li><p>然后作者就做了实验，来对比<code>maxout</code>与<code>ReLU</code>的效果，对比图如下图所示，从中得到如下结论：</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/2.png" alt="Comparison to rectifiers" border="0" />
+</center>
+
+<ol>
+<li><p>要让<code>ReLU</code>达到<code>maxout</code>的表现，需要使之具有和<code>maxout</code>相同数量的滤波器（即使用比原来<code>k</code>倍的滤波器，同样也要<code>k</code>倍的<code>ReLU</code>单元），但网络状态和所需要的参数也是原来的k倍，也是对应<code>maxout</code>的<code>k</code>倍。</p>
+</li>
+<li><p>训练中使用<code>dropout</code>时，<code>maxout</code>的优化性能比<code>relu + max pooling</code>好</p>
+</li>
+</ol>
+</li>
+<li><p>既然效果那么好，为什么用的还是很少呢？</p>
+<p>主要原因是因为参数会成倍的增加。不过还是会见到有用的，比如<code>GAN</code>的 discriminator 就用了。</p>
+</li>
+</ul>
+<h3 id="Advantages"><a href="#Advantages" class="headerlink" title="Advantages"></a>Advantages</h3><ol>
+<li><p>实验中<code>SGD</code>使得<code>ReLU</code>饱和在<code>0</code>值的时间少于<code>5%</code>，而<code>dropout</code>则超过<code>60%</code>。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/3.png" alt="epochs" border="0" />
+</center>
+
+<p>由于<code>ReLU</code>激活函数中的<code>0</code>值是一个常数，这就会阻止梯度在这些单元上传播（无论正向还是反向），这也就使得这些单元很难再次激活，这会导致很多单元由激活转变为非激活。而<code>maxout</code>就不会存在这样的问题，梯度在<code>maxout</code>单元上总是能够传播，即使<code>maxout</code>出现了<code>0</code>值，但是这些<code>0</code>值是参数的函数可以被改变，从而<code>maxout</code>单元总是激活的。单元中较高比例的且不易改变的<code>0</code>值会损害优化性能。</p>
+</li>
+<li><p>一是类似<code>dropout</code>的思想可以防止过拟合；而是没有梯度消失的问题，所以能够 train deep/deeper network；</p>
+<p>不过，需要注意的是，别人做实验发现<code>maxout</code>要与<code>dropout</code>一起使用，效果比较好， 原因不知道为什么。</p>
+</li>
+</ol>
+<h3 id="Drawback"><a href="#Drawback" class="headerlink" title="Drawback"></a>Drawback</h3><ul>
+<li><p>Parameters increased by k times</p>
+<p>这也是为什么不经常使用的原因。</p>
+</li>
+<li><p><code>maxout</code>和<code>NIN</code>都是对传统<code>conv+relu</code>的改进。</p>
+<p><code>maxout</code>想表明它能够拟合任何凸函数，也就能够拟合任何的激活函数（默认了激活函数都是凸的）</p>
+<p><code>NIN</code>想表明它不仅能够拟合任何凸函数，而且能够拟合任何函数，因为它本质上可以说是一个小型的全连接神经网络</p>
+</li>
+</ul>
+<h3 id="Related-work-associated-with-dropout"><a href="#Related-work-associated-with-dropout" class="headerlink" title="Related work associated with dropout"></a>Related work associated with dropout</h3><ul>
+<li><p>DropConnect</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/4.png" alt="DropConnect" border="0" />
+</center>
+
+
+</li>
+</ul>
+<h2 id="Network-in-Network"><a href="#Network-in-Network" class="headerlink" title="Network in Network"></a>Network in Network</h2><h3 id="Motivation-1"><a href="#Motivation-1" class="headerlink" title="Motivation"></a>Motivation</h3><ul>
+<li><p>作者认为<code>CNN</code>中的<code>filter</code>做内积然后用<code>activation function</code>做非线性变换的做法只是一种广义的线性模型（GLM），这就导致抽象能力不够。</p>
+</li>
+<li><p>也就是说<code>CNN</code>其实有一个假设就是：潜在的概念是线性可分的。然而，相同概念的数据一般是存在于一个非线性的流形中，因此，对同一个概念的东西，可能会学习多个filter，这就增加了很多可能无用的参数。</p>
+<p>如果能用一个更加非线性的函数，是不是就能很好的学习到物体的特征，从而减少 filter 的数量，减少参数的数量？</p>
+</li>
+<li><p>使用一个<code>MLP</code>代替卷积层的线性卷积操作，原因有两个：</p>
+<ol>
+<li><p><code>MLP</code>可以拟合任意形式的函数，线性、非线性的都可以</p>
+</li>
+<li><p><code>MLP</code>可以和<code>CNN</code>很好的结合，进行 backwards propagation</p>
+</li>
+<li><p><code>MLP</code>可以作为一个深层结构，也包含了特征重用的思想</p>
+</li>
+</ol>
+</li>
+<li><p>所以<code>NIN</code>的主要目的就是引入更多的非线性元素，并没有替换掉<code>activation function</code>。改变的只是卷积的方式：不再是<code>element-wise</code>形式的乘积，而是用非线性的<code>MLP + ReLU</code>完成。</p>
+</li>
+</ul>
+<h3 id="Architecture-1"><a href="#Architecture-1" class="headerlink" title="Architecture"></a>Architecture</h3><ul>
+<li><p>Covolution + Activation Function –&gt; Mlpconv</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/5.png" alt="Mlpconv" border="0" />
+</center>
+
+<p>隐藏层的每一个<code>hidden units</code>都可以看作是一个<code>1 x 1</code>的<code>filter</code>，每个<code>filter</code>对前面得到的<code>feature map</code>进行卷积得到一个<code>feature map</code>（这里没有使用<code>cross channel pooling</code>）</p>
+<p>可以把它看作一个 building block，然后 overall structure of the NIN is the stacking of multiple mlpconv layers，就是进行<code>1 x 1</code>的卷积</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/20160117131304843.png" alt="Overall structure" border="0" />
+</center>
+</li>
+<li><p>Fully connected layer + softmax –&gt; Global Average Pooling + softmax</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/6.png" alt="Global Average Pooling" border="0" />
+</center>
+
+<p>这是首次引入<code>GAP</code>的概念，把<code>FC</code>换成<code>GAP</code>的原因有下面几条：</p>
+<ol>
+<li>Fully connected layers act as a black box</li>
+<li>Fully connected layer can be easily overfitting</li>
+<li>Native to the convolution structure by enforcing correspondences between feature maps and categories.</li>
+<li>Global Average Pooling more meaningful and interpretable</li>
+<li>Feature maps –&gt; categories confidence maps</li>
+<li>No parameters</li>
+</ol>
+<p>可以看这里<a href="https://www.zhihu.com/question/41037974/answer/150553859" target="_blank" rel="noopener">GAP</a>。</p>
+<p>实验效果也很好，超过了<code>FC</code>的效果。</p>
+</li>
+<li><p>Global Average Pooling as a Regularizer</p>
+<ul>
+<li><p>Mlpconv + Fully Connected</p>
+</li>
+<li><p>Mlpconv + Global Average Pooling</p>
+</li>
+<li><p>Conventional CNN + Fully Connected</p>
+</li>
+<li><p>Conventional CNN + Fully Connected + dropout</p>
+</li>
+<li><p>Conventional CNN + Global Average Pooling</p>
+</li>
+</ul>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/10/8.png" alt="Comparison with ReLU" border="0" />
+</center>
+
+<p>用<code>mlpconv</code>网络，只改变最后的层，证实了Global Average Pooling 的效果比<code>FC</code>更好，又通过证明证实了它的作用与 Regularizer 相类似。</p>
+<p>用传统的<code>CNN + GAP</code>与传统的<code>CNN + FCL (+dropout)</code>进一步的证实了效果更好</p>
+<p>主要原因是可以很好的减轻过拟合。</p>
+</li>
+</ul>
+<h3 id="Visualization-of-NIN"><a href="#Visualization-of-NIN" class="headerlink" title="Visualization of NIN"></a>Visualization of NIN</h3>  <center>
+  <img src="https://www.tuchuang001.com/images/2017/03/10/9.png" alt="Visualization of NIN" border="0" />
+  </center>
+
+<ul>
+<li><p>亮的是被激活的。目的是为了证明<code>GAP</code>的 advantage。</p>
+</li>
+<li><p>这只利用的 category information，如果利用了 bounding box 可以得到更好的效果。</p>
+</li>
+</ul>
+<h3 id="Advantages-1"><a href="#Advantages-1" class="headerlink" title="Advantages"></a>Advantages</h3><ul>
+<li><p>更好的局部抽象</p>
+</li>
+<li><p>更小的全局<code>overfitting</code></p>
+</li>
+<li><p>更少的参数(没有全连接层)</p>
+</li>
+</ul>
+<h3 id="Application"><a href="#Application" class="headerlink" title="Application"></a>Application</h3><ul>
+<li><p>Image Classification</p>
+</li>
+<li><p>Object Detection</p>
+</li>
+</ul>
+<h2 id="Comparison-with-Maxout-Network"><a href="#Comparison-with-Maxout-Network" class="headerlink" title="Comparison with Maxout Network"></a>Comparison with Maxout Network</h2><p>都是在隐藏层与隐藏层之间加入隐藏层的方式对传统<code>CNN</code>进行改进</p>
+<ul>
+<li><p>Maxout Network</p>
+<ul>
+<li><p>为了利用<code>dropout</code>的思想，引入更强的正则化</p>
+</li>
+<li><p>以直接替换掉<code>activation function</code>的形式完成</p>
+</li>
+</ul>
+</li>
+<li><p>Network in Network</p>
+<ul>
+<li><p>为了引入更强的非线性因素</p>
+</li>
+<li><p>以改动卷积层工作方式的形式完成</p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Paper/">Paper</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/CNN/">CNN</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Chapter 5 Machine Learning Basics | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Chapter 5 Machine Learning Basics"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-02-22T16:40:27.000Z"><a href="/2017/02/23/Chapter-5-Machine-Learning-Basics/">2017-02-23</a></time>
+      
+      
+  
+    <h1 class="title">Chapter 5 Machine Learning Basics</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="《Deep-Learning》-读书笔记"><a href="#《Deep-Learning》-读书笔记" class="headerlink" title="《Deep Learning》 读书笔记"></a>《Deep Learning》 读书笔记</h1><p>写这个笔记的目的有两个：一是以高层的角度把整个章节的内容联系起来，从而加深自己的理解，同时也可以供日后复习使用；二是在日后的组会中可能会降到的时候，有东西可以讲（好偷懒 -_-）。</p>
+<p>因为是刚入门的新手，有很多东西还不了解，或者了解的不透彻，肯定会有错误和疏漏的地方，希望大家不吝赐教哈～～</p>
+<h1 id="5-1-Learning-Algorithms"><a href="#5-1-Learning-Algorithms" class="headerlink" title="5.1 Learning Algorithms"></a>5.1 Learning Algorithms</h1><p>首先，提出了经典的<code>ML</code>的定义：</p>
+<blockquote>
+<p>A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P , if its performance at tasks in T , as measured by P , improves with experience E.</p>
+</blockquote>
+<a id="more"></a>
+
+<p>然后，本章分 3 节分别详细的对定义中的3个实体进行 description（to provide a formal definition of what may be used for each of these entities），然后再最后一小节用 <strong>Linear Regression</strong> 的例子进行了讲解。</p>
+<p>另外，这里引入了 <strong>design matrix</strong> 的概念。</p>
+<p>具体内容可以参阅书籍。</p>
+<h1 id="5-2-Capacity-Overfitting-and-Underfitting"><a href="#5-2-Capacity-Overfitting-and-Underfitting" class="headerlink" title="5.2 Capacity, Overfitting and Underfitting"></a>5.2 Capacity, Overfitting and Underfitting</h1><ul>
+<li><p><code>Machine Learning</code>使用的是<code>Optimization</code>的方法进行模型的训练，但是它并不是<code>Optimization</code>。因为<code>Optimization</code>是完全的希望准确度在训练数据上尽可能的高（最终过拟合），而<code>ML</code>最终想要的是 <strong>generalization/test error</strong> 尽可能的低。</p>
+<p>这个内容在第 8 章有一小节专门对它们进行了对比，具体可以看那里。</p>
+</li>
+<li><p>How can we affect performance on the test set when we get to observe only the training set? </p>
+<p>Make some assumptions： These assumptions are that the examples in each dataset are <strong>independent from each other</strong>, and that the train set and test set are <strong>identically distributed</strong>, drawn from the same probability distribution as each other. </p>
+</li>
+<li><p>Capacity</p>
+<ul>
+<li><p>这里的<code>Capacity</code>指的是模型对 <strong>training dataset</strong> 的拟合能力，所以<code>Capacity</code>越高并不一定越好，可能会产生过拟合现象。</p>
+</li>
+<li><p><strong>One way</strong> to control the capacity of a learning algorithm is by choosing its <strong>hypothesis space</strong>, the set of functions that the learning algorithm is allowed to select as being the solution. 另外，还需要注意到 functions 的具体形式也会影响到模型的<code>Capacity</code>。</p>
+</li>
+<li><p>关于模型的<code>Capacity</code>，提到了<code>Occam’s razor</code>原则：在模型的<strong>效果相似</strong>的情况下，选择较为<strong>简单</strong>的模型。目的是提高模型的 generalization 能力。</p>
+</li>
+</ul>
+</li>
+<li><p>We must remember that while simpler functions are more likely to generalize (to have a small gap between training and test error) we must still choose a sufficiently complex hypothesis to achieve low training error. </p>
+<p>也就是总是选择<strong>复杂</strong>的模型，然后用<code>Regularization</code>的方法（<code>weight decay</code>、<code>dropout</code>、<code>early stopping</code>、<code>cross validation</code>等）减轻过拟合的程度。（<code>CS231n</code>课程中有强调这一点）。</p>
+</li>
+<li><p><code>Capacity</code>与<code>Generalization error</code>的关系如下图所示。</p>
+ <center>
+ <img src="https://www.tuchuang001.com/images/2017/03/14/QQ20170314232339.png" alt="Typical relationship between capacity and error" border="0" />
+ </center>
+</li>
+<li><p><strong>Parametric models</strong> learn a function described by a parameter vector whose size is <strong>finite and fixed</strong> before any data is observed. <strong>Non-parametric models</strong> have no such limitation. 注意 <strong>Non-parametric models</strong> 并不是没有参数，只是参数数量不是固定的。</p>
+</li>
+<li><p>Note that it is possible for the model to have optimal capacity and yet still have a large gap between training and generalization error. In this situation, we may be able to reduce this gap by <strong>gathering more training examples</strong>.</p>
+</li>
+</ul>
+<h2 id="5-2-1-The-No-Free-Lunch-Theorem"><a href="#5-2-1-The-No-Free-Lunch-Theorem" class="headerlink" title="5.2.1 The No Free Lunch Theorem"></a>5.2.1 The No Free Lunch Theorem</h2><ul>
+<li><p>In some sense, no machine learning algorithm is universally any better than any other. </p>
+</li>
+<li><p>The <strong>no free lunch</strong> theorem implies that we must design our machine learning algorithms to perform well on a specific task.</p>
+</li>
+</ul>
+<h2 id="5-2-2-Regularization"><a href="#5-2-2-Regularization" class="headerlink" title="5.2.2 Regularization"></a>5.2.2 Regularization</h2><ul>
+<li><p>Regularization is any modification we make to a learning algorithm that is intended to reduce its generalization error but not its training error.</p>
+</li>
+<li><p><code>Regularization</code>就是为了尽量减轻过拟合的程度，比如使用了<code>L2/weight decay</code>正则化的拟合结果如下图所示。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/14/QQ20170315000134.png" alt="Results with different regularization strength" border="0" />
+</center>
+
+<p>从中可以看出<code>regularization</code>的效果是非常显著的。</p>
+</li>
+<li><p><code>Regularization</code>有多种实现方式，但是必须根据要解决的具体问题进行选择使用哪一种方式（we must choose a form of regularization that is well-suited to the particular task）。</p>
+</li>
+<li><p><strong><a href="https://watsonyanghx.github.io/2017/02/25/Chapter-7-Regularization-for-Deep-Learning/">第 7 章</a></strong> 都在讲这个，可以参考书本内容。</p>
+</li>
+</ul>
+<h1 id="5-3-Hyperparameters-and-Validation-Sets"><a href="#5-3-Hyperparameters-and-Validation-Sets" class="headerlink" title="5.3  Hyperparameters and Validation Sets"></a>5.3  Hyperparameters and Validation Sets</h1><ul>
+<li><p><code>Hyperparameters</code>（如<code>learning rate</code>、<code>batch size</code>、<code>regularization</code>的强度等）不需要学习，原因有两个：</p>
+<ul>
+<li><p>难于学习</p>
+</li>
+<li><p>如果学习，可能会造成<code>overfitting</code>（If learned on the training set, such hyperparameters would always choose the maximum possible model capacity, resulting in overfitting (refer to figure 5.3)）. </p>
+</li>
+</ul>
+</li>
+<li><p>与 <code>Hyperparameters</code> 对应的是 <code>parameters</code>（如权重矩阵<code>W</code>、偏置项<code>b</code>），它们是需要学习的，它们控制着模型学习到的 features 如何影响接下来的 prediction（107页）。</p>
+</li>
+<li><p><code>Hyperparameters</code>从某个角度上说也是可以学习的，比如对于<code>learning rate</code>，一开始不知道哪一个好，可以定义一个区间，然后使用<strong>随机搜索</strong>（<code>CS231n</code>课程中说<strong>随机搜索</strong>会比<strong>网格搜索</strong>效果好，关于这点本书的 <strong><a href="https://watsonyanghx.github.io/2017/02/25/Chapter-8-Optimization-for-Training-Deep-Models/">第 8 章</a></strong> 也有讲解对比，可以参阅那小节的内容）的方式从这个区间进行选择，用一个<strong>比较小</strong>的 mini-batch 去跑一个<strong>比较小</strong>的 epoch 来验证哪一个（或哪一个区间内的）<code>learning rate</code>比较好，然后缩小这个区间，按照同样的方式再接着进行选择（也就是学习）（<code>CS231n</code>课程第一个 assignment 中有一小题是关于这个的）。</p>
+</li>
+<li><p>It is important that the <strong>test examples</strong> are not used in any way to make choices about the model, including its <strong>hyperparameters</strong>.</p>
+<p>也就是说在训练的时候不能用模型在 test dataset 的 test error 的高低来决定选择哪一个 <code>Hyperparameters</code> 、或者在什么时候停止训练，因为这相当于以一种变相的方式把 test dataset 当成了 training dataset 。正确的方法是从 training dataset 中抽出一部分（disjoint subsets，通常是20%）当做 validation dataset 来完成这项工作（<code>CS231n</code>课程中也有强调这一点）。</p>
+</li>
+<li><p>validation set is used to “train” the hyperparameters</p>
+</li>
+<li><p>After all hyperparameter optimization is complete, the generalization error may be estimated using the test set.</p>
+</li>
+</ul>
+<h2 id="5-3-1-Cross-Validation"><a href="#5-3-1-Cross-Validation" class="headerlink" title="5.3.1 Cross-Validation"></a>5.3.1 Cross-Validation</h2><ul>
+<li><p>通常是<code>k-fold cross-validation</code>（<code>CS231n</code>课程的第一个 assignment 中有一小题是关于 <code>cross-validation</code> 的）。</p>
+</li>
+<li><p>注意分割一定要保证：<strong>non-overlapping subsets</strong></p>
+</li>
+<li><p>这里有一个问题，</p>
+</li>
+</ul>
+<h1 id="5-4-Estimators-Bias-and-Variance"><a href="#5-4-Estimators-Bias-and-Variance" class="headerlink" title="5.4  Estimators, Bias and Variance"></a>5.4  Estimators, Bias and Variance</h1><p>上面的都是用来评估机器学习算法学习到的模型的好坏的指标，分别从不同的角度对机器学习算法的性能进行衡量。</p>
+<h2 id="5-4-1-Point-Estimation"><a href="#5-4-1-Point-Estimation" class="headerlink" title="5.4.1 Point Estimation"></a>5.4.1 Point Estimation</h2><ul>
+<li><p>Point Estimator</p>
+<ul>
+<li><p>因为对函数<strong>没有任何约束</strong>（The definition does not require that g return a value that is close to the true θ or even that the range of g is the same as the set of allowable values of θ），所以可以是<strong>任何函数</strong>（almost any function thus qualifies as an estimator）。</p>
+</li>
+<li><p>但却有 good estimator：a good estimator is a function whose output is close to the true underlying θ that generated the training data.</p>
+</li>
+<li><p>就是机器学习算法要学习的模型（function），当然<strong>目的</strong>是要得到 good estimator。</p>
+</li>
+</ul>
+</li>
+<li><p>Function Estimation</p>
+<ul>
+<li>机器学习算法学习到的模型实际上就是一个 function，Point Estimation 做的是找到 function 的<code>parameters</code>，而从某种角度上说其实就是在找这个 function。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-4-2-Bias"><a href="#5-4-2-Bias" class="headerlink" title="5.4.2 Bias"></a>5.4.2 Bias</h2><ul>
+<li>Bias<ul>
+<li>衡量模型<strong>拟合训练数据</strong>的能力（训练数据不一定是整个 training dataset，而是只用于训练它的那一部分数据，例如：mini-batch）。</li>
+<li><code>bias</code>越小，拟合能力越高（可能产生<code>overfitting</code>）；反之，拟合能力越低（可能产生<code>underfitting</code>）。</li>
+<li>注意，<code>bias</code>是针对<strong>一个模型</strong>来说的，这一点与<code>variance</code>不同。</li>
+</ul>
+</li>
+</ul>
+<p>这点还是比较好理解的，并且<code>bias</code>翻译成偏差，从字面意思也可以看出是和<strong>某个值</strong>的偏离程度，而这个<strong>某个值</strong>在机器学习算法中就是<strong>整个数据的期望值</strong>。</p>
+<h2 id="5-4-3-Variance-and-Standard-Error"><a href="#5-4-3-Variance-and-Standard-Error" class="headerlink" title="5.4.3 Variance and Standard Error"></a>5.4.3 Variance and Standard Error</h2><ul>
+<li><p>Variance</p>
+<ul>
+<li>衡量模型的 generalization 的能力。</li>
+<li><code>variance</code>越小，模型的 generalization 的能力越高；反之，模型的 generalization 的能力越低。</li>
+<li>它是针对<strong>多个模型</strong>来说的，<font color='red'>针对多个模型来说是什么意思？</font>看下面的分析。</li>
+</ul>
+</li>
+<li><p>在训练模型的时候不是一下子在整个 training dataset 上进行训练，而是采用从 training dataset 中 sample 数据点的方式来进行训练（例如：mini-batch）。</p>
+<p>因为都是从同一个数据集 sample 数据点，所以 sample 的数据点可以保证都是<strong>同分布</strong>的。但是也正因为 sample 的数据点的不同，很可能会生成不同的模型。</p>
+<p>举例来说，假设这里进行了4次 sample 数据点，并在得到的 mini-batch 的数据集上进行算法的训练，得到的模型如下图所示。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/03/v2-54ed67557d663b895fe1d233e76641a7_b.png" alt="在通过 sample 得到的不同数据点上学习到的不同模型" border="0" />
+</center>
+
+<p>那么你认为这样的结果好吗？肯定是不好的啊，因为算法每次学习到的模型都不一样，这说明算法无法学习到数据的 distribution 规律，那还怎么来进行预测？</p>
+<p>我们<strong>期望的结果</strong>是：每次不管怎么 sample 数据点，算法学习到的模型都不会变化太大（比如：都是直线，或者都是二次曲线）。这样的话说明算法能很好的学习到数据的 distribution 规律，那么如果来了新的数据（同分布），算法学习到的模型就能够很好的进行 predict（说明模型的 generalization 能力好）。</p>
+<p><font color='red'>而<code>variance</code>就是衡量每次在不同 mini-batch 数据上训练生成的不同模型之间的差异性大小的度量值。</font></p>
+<p><code>variance</code>越小，说明在不同 mini-batch 训练数据上生成的模型的差异性小 —-&gt; 算法学习到的模型能够很好的对新的数据（同分布）进行 predict（算法能很好的学习到了数据的 distribution 规律） —-&gt; 说明模型的 generalization 能力好；反之，模型的 generalization 的能力越低。</p>
+<p>现在再看就知道为什么<code>variance</code>是针对多个（不同）模型说的了，它与<code>bias</code>的区别也很明显的可以看到了。</p>
+</li>
+<li><p>那<code>variance</code>又是如何和<code>cross-validation</code>联系上的呢？接着看下一小节的分析。</p>
+</li>
+</ul>
+<h2 id="5-4-4-Trading-off-Bias-and-Variance-to-Minimize-Mean-Squared-Error"><a href="#5-4-4-Trading-off-Bias-and-Variance-to-Minimize-Mean-Squared-Error" class="headerlink" title="5.4.4 Trading off Bias and Variance to Minimize Mean Squared Error"></a>5.4.4 Trading off Bias and Variance to Minimize Mean Squared Error</h2><ul>
+<li><p>Bias and variance measure two different sources of error in an estimator. </p>
+<ul>
+<li><p><strong>Bias</strong> measures the expected deviation from the true value of the function or parameter. </p>
+</li>
+<li><p><strong>Variance</strong> on the other hand, provides a measure of the deviation from the expected estimator value that any particular sampling of the data is likely to cause.</p>
+</li>
+</ul>
+</li>
+<li><p>The most common way to negotiate this trade-off is to use <font color='red'>cross-validation</font>. Empirically, cross-validation is highly successful on many real-world tasks.</p>
+</li>
+<li><p><code>bias</code>、<code>variance</code>与<code>error rate</code>有什么关系？</p>
+<p>当用的<code>loss function</code>是<code>MSE</code>的时候有如下关系：</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/03/QQ20170303013627.png" alt="MSE 与 Bias、Variance 的关系" border="0" />
+</center>
+</li>
+<li><p><code>bias</code> VS <code>variance</code> 的关系可以看下图（来自 <a href="http://www.deeplearningbook.org/contents/ml.html" target="_blank" rel="noopener">Machine Learning Basics</a> 5.4.4 节）</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/02/QQ20170303010853.png" alt="Capacity 与 bias、variance 的关系" border="0" />
+</center>
+
+<p><font color='red'>注意</font>：模型的 capacity 最优点不是<code>bias</code>和<code>variance</code>的相交点。</p>
+</li>
+</ul>
+<h2 id="5-4-5-Consistency"><a href="#5-4-5-Consistency" class="headerlink" title="5.4.5 Consistency"></a>5.4.5 Consistency</h2><ul>
+<li>Consistency ensures that the bias induced by the estimator diminishes as the number of data examples grows. </li>
+</ul>
+<h1 id="5-5-Maximum-Likelihood-Estimation"><a href="#5-5-Maximum-Likelihood-Estimation" class="headerlink" title="5.5  Maximum Likelihood Estimation"></a>5.5  Maximum Likelihood Estimation</h1><p>这一节讲的非常好。</p>
+<ul>
+<li><p><code>Maximum Likelihood Estimation</code>：利用已知的样本结果反推最有可能（最大概率）导致这样结果的参数值。</p>
+</li>
+<li><p>本部分主要讲了如何把 maximum likelihood 转化为 minimize of the negative log-likelihood 的，讲的非常好。</p>
+</li>
+<li><p>指出：use the term “cross-entropy” to identify specifically the negative log-likelihood of a Bernoulli or softmax distribution, but that is a misnomer</p>
+</li>
+<li><p><strong>Any</strong> loss consisting of a negative log-likelihood is a crossentropy between the empirical distribution defined by the training set and the probability distribution defined by model. </p>
+</li>
+<li><p><font color='red'>问题：</font><code>Maximum Likelihood Estimation</code>与<code>BP</code>、<code>GD</code>的关系是什么？</p>
+</li>
+</ul>
+<h2 id="5-5-1-Conditional-Log-Likelihood-and-Mean-Squared-Error"><a href="#5-5-1-Conditional-Log-Likelihood-and-Mean-Squared-Error" class="headerlink" title="5.5.1 Conditional Log-Likelihood and Mean Squared Error"></a>5.5.1 Conditional Log-Likelihood and Mean Squared Error</h2><ul>
+<li><p>The maximum likelihood estimator can readily be generalized to the case where our goal is to estimate a conditional probability P(y | x; θ) in order to predict y given x. This is actually the most common situation because it forms the basis for most supervised learning. If X represents all our inputs and Y all our observed targets, then the conditional maximum likelihood estimator is</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/15/QQ20170315020357.png" alt="Conditional maximum likelihood estimator" border="0" />
+</center>
+
+<p>If the examples are assumed to be i.i.d., then this can be decomposed into</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/15/QQ20170315020434.png" alt="Decomposition form" border="0" />
+</center>
+</li>
+<li><p>然后，用 Linear Regression as Maximum Likelihood 的例子讲了如何把<code>MSE</code>转化为<code>Maximum Likelihood Estimation</code></p>
+</li>
+</ul>
+<h2 id="5-5-2-Properties-of-Maximum-Likelihood"><a href="#5-5-2-Properties-of-Maximum-Likelihood" class="headerlink" title="5.5.2 Properties of Maximum Likelihood"></a>5.5.2 Properties of Maximum Likelihood</h2><ul>
+<li><p>主要讲了<code>Maximum Likelihood</code>的优点。</p>
+</li>
+<li><p>关于为什么要用<code>Maximum Likelihood Estimation</code>，而不要用<code>MSE</code>的原因，可以参考下面博客，讲的也是非常好。</p>
+<ul>
+<li><p><a href="http://neuralnetworksanddeeplearning.com/chap3.html" target="_blank" rel="noopener">CHAPTER 3 Improving the way neural networks learn</a></p>
+</li>
+<li><p><a href="https://hit-scir.gitbooks.io/neural-networks-and-deep-learning-zh_cn/content/chap3/c3s1.html" target="_blank" rel="noopener">交叉熵代价函数 · 神经网络与深度学习</a></p>
+</li>
+<li><p><a href="https://jamesmccaffrey.wordpress.com/2013/11/05/why-you-should-use-cross-entropy-error-instead-of-classification-error-or-mean-squared-error-for-neural-network-classifier-training/" target="_blank" rel="noopener">Why You Should Use Cross-Entropy Error Instead Of Classification Error Or Mean Squared Error For Neural Network Classifier Training</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="5-6-Bayesian-Statistics"><a href="#5-6-Bayesian-Statistics" class="headerlink" title="5.6  Bayesian Statistics"></a>5.6  Bayesian Statistics</h1><p>啊啊啊啊，看到数学公式就不想看了 -_- </p>
+<h2 id="5-6-1-Maximum-A-Posteriori-MAP-Estimation"><a href="#5-6-1-Maximum-A-Posteriori-MAP-Estimation" class="headerlink" title="5.6.1 Maximum A Posteriori (MAP) Estimation"></a>5.6.1 Maximum A Posteriori (MAP) Estimation</h2><h1 id="5-7-Supervised-Learning-Algorithms"><a href="#5-7-Supervised-Learning-Algorithms" class="headerlink" title="5.7  Supervised Learning Algorithms"></a>5.7  Supervised Learning Algorithms</h1><p>这里主要简要的介绍了一些比较简单的Supervised Learning Algorithms，如果想要细致了解这些算法，看这些肯定是不够的。</p>
+<ul>
+<li>One weakness of k-nearest neighbors is that it cannot learn that one feature is more discriminative than another.（143页）</li>
+</ul>
+<h3 id="5-7-1-Probabilistic-Supervised-Learning"><a href="#5-7-1-Probabilistic-Supervised-Learning" class="headerlink" title="5.7.1 Probabilistic Supervised Learning"></a>5.7.1 Probabilistic Supervised Learning</h3><h3 id="5-7-2-Support-Vector-Machines"><a href="#5-7-2-Support-Vector-Machines" class="headerlink" title="5.7.2 Support Vector Machines"></a>5.7.2 Support Vector Machines</h3><h3 id="5-7-3-Other-Simple-Supervised-Learning-Algorithms"><a href="#5-7-3-Other-Simple-Supervised-Learning-Algorithms" class="headerlink" title="5.7.3 Other Simple Supervised Learning Algorithms"></a>5.7.3 Other Simple Supervised Learning Algorithms</h3><h1 id="5-8-Unsupervised-Learning-Algorithms"><a href="#5-8-Unsupervised-Learning-Algorithms" class="headerlink" title="5.8  Unsupervised Learning Algorithms"></a>5.8  Unsupervised Learning Algorithms</h1><ul>
+<li><p>Informally, unsupervised learning refers to most attempts to extract information from a distribution that do not require human labor to annotate examples.</p>
+</li>
+<li><p>There are multiple ways of defining a simpler representation. Three of the most common include（146页）：</p>
+<ul>
+<li><p>lower dimensional representations</p>
+</li>
+<li><p>sparse representations </p>
+</li>
+<li><p>independent representations</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-8-1-Principal-Components-Analysis"><a href="#5-8-1-Principal-Components-Analysis" class="headerlink" title="5.8.1 Principal Components Analysis"></a>5.8.1 Principal Components Analysis</h2><ul>
+<li>讲了<code>PCA</code>的例子</li>
+</ul>
+<h2 id="5-8-2-k-means-Clustering"><a href="#5-8-2-k-means-Clustering" class="headerlink" title="5.8.2 k-means Clustering"></a>5.8.2 k-means Clustering</h2><ul>
+<li>149 页用<code>k-means</code>的例子解释了<code>one-hot</code>形式（一种比较极端的 sparse representations）会损失很多有用的信息，使用<code>distributed representation</code>（比如<code>NLP</code>中的<code>word embeddings</code>）的方式可以取得更好的效果。</li>
+</ul>
+<h1 id="5-9-Stochastic-Gradient-Descent"><a href="#5-9-Stochastic-Gradient-Descent" class="headerlink" title="5.9  Stochastic Gradient Descent"></a>5.9  Stochastic Gradient Descent</h1><ul>
+<li><p><code>SGD</code>实际值得是只取 1 个 example（此时的训练速度非常慢），但这里与<code>mini-batch GD</code>（此时的训练速度会得到加快）混用了，本篇笔记里把它们俩分开使用。</p>
+</li>
+<li><p><code>mini-batch GD</code>可以加速收敛的原因，可以用一个极端的例子进行解释（这个例子来自<code>CS231n</code>课程）：</p>
+<p>比如有 1000 个 training examples，总共有 10 个类别，每个类别都有 100 个 examples，假设 mini-batch 的大小是 10，每次 sample mini-batch 进行训练的时候都恰好从每个类别中选择一个 example。在这种极端的情况下，可以看出 mini-batch 完全就是整个 training examples 的表达，所以能够把一个根本不着边际的参数，一下子很快的更新到（几乎）最好的情况。</p>
+</li>
+</ul>
+<h1 id="5-10-Building-a-Machine-Learning-Algorithm"><a href="#5-10-Building-a-Machine-Learning-Algorithm" class="headerlink" title="5.10  Building a Machine Learning Algorithm"></a>5.10  Building a Machine Learning Algorithm</h1><ul>
+<li><p>这里把 Building a Machine Learning Algorithm 看成是一种类似组建积木的方式，整个 Building a Machine Learning Algorithm 可以分成几个部分。这样看的好处是可以把不同的 Machine Learning Algorithm 联系起来，而不是相互独立。（Nearly all deep learning algorithms can be described as particular instances of a fairly simple recipe: combine a specification of a dataset, a cost function, an optimization procedure and a model.）</p>
+</li>
+<li><p>这种看待的方式可以用于supervised and unsupervised learning（The recipe for constructing a learning algorithm by combining models, costs, and optimization algorithms supports both supervised and unsupervised learning.）。</p>
+</li>
+</ul>
+<h1 id="5-11-Challenges-Motivating-Deep-Learning"><a href="#5-11-Challenges-Motivating-Deep-Learning" class="headerlink" title="5.11  Challenges Motivating Deep Learning"></a>5.11  Challenges Motivating Deep Learning</h1><p>这里主要讲了<code>Deep Learning</code>中遇到的 Challenges，感觉类似一种科普，没事可以读读玩。</p>
+<h2 id="5-11-1-The-Curse-of-Dimensionality"><a href="#5-11-1-The-Curse-of-Dimensionality" class="headerlink" title="5.11.1 The Curse of Dimensionality"></a>5.11.1 The Curse of Dimensionality</h2><ul>
+<li><p>维度爆炸。</p>
+<p>比如：用<code>one-hot</code>形式表示 word，如果词汇表变大，每个 word 的<code>one-hot</code>表示的维度也会随之增大。多个 word 相乘，维度会很快的增大，最后导致无法计算。</p>
+</li>
+</ul>
+<h2 id="5-11-2-Local-Constancy-and-Smoothness-Regularization"><a href="#5-11-2-Local-Constancy-and-Smoothness-Regularization" class="headerlink" title="5.11.2 Local Constancy and Smoothness Regularization"></a>5.11.2 Local Constancy and Smoothness Regularization</h2><ul>
+<li>Among the most widely used of these implicit “priors” is the smoothness prior or local constancy prior. This prior states that the function we learn should not change very much within a small region.</li>
+</ul>
+<h2 id="5-11-3-Manifold-Learning"><a href="#5-11-3-Manifold-Learning" class="headerlink" title="5.11.3 Manifold Learning"></a>5.11.3 Manifold Learning</h2><ul>
+<li><p>流形学习</p>
+<p>主要目的是<code>Dimension Reduction</code>，<code>PCA</code>就是一种。可以参考下面的链接：</p>
+<ul>
+<li><p><a href="http://scikit-learn.org/stable/modules/manifold.html" target="_blank" rel="noopener">2.2. Manifold learning</a></p>
+</li>
+<li><p><a href="http://blog.pluskid.org/?p=533" target="_blank" rel="noopener">浅谈流形学习 « Free Mind</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/24015486" target="_blank" rel="noopener">求简要介绍一下流形学习的基本思想？ - 知乎</a></p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Deep-Learning/">Deep Learning</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

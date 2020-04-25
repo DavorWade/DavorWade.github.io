@@ -1,0 +1,1031 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Machine Learning | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Machine Learning"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:24:13.000Z"><a href="/2020/04/25/Machine-Learning/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title">Machine Learning</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>如果公式无法正常显示，请尝试多刷新几次页面。</p>
+<h1 id="Unsupervised"><a href="#Unsupervised" class="headerlink" title="Unsupervised"></a>Unsupervised</h1><h2 id="Clustering"><a href="#Clustering" class="headerlink" title="Clustering"></a>Clustering</h2><h3 id="K-Means"><a href="#K-Means" class="headerlink" title="K-Means"></a>K-Means</h3><ul>
+<li><p>算法复杂度不易控制 $ O(KNm) $ 。</p>
+</li>
+<li><p><code>K-Means</code> 时候出现的超级大群现象，如何解决?</p>
+<a id="more"></a>
+</li>
+<li><p>如何确定 K？</p>
+<ul>
+<li><p>根据实际的应用场景，比如衣服分成 S, M, L 三类。</p>
+</li>
+<li><p>降维后可视化，观察然后选择 K。</p>
+</li>
+<li><p>将重构误差或对数似然作为 K 的函数绘制图形，并找出<strong>拐点</strong>（不是最低点）。</p>
+</li>
+<li><p><code>DBSCAN</code> ，省去选择 K 的步骤；或 <code>Hierarchical Clustering</code> ，观察得到的聚类树，来决定 K 的值。</p>
+</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li><p>计算时间短，速度快</p>
+</li>
+<li><p>容易解释</p>
+</li>
+<li><p>聚类效果还不错</p>
+</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li><p>需要提前确定 K 值</p>
+</li>
+<li><p>对初始的聚类中心的选择比较敏感</p>
+</li>
+<li><p>对异常值敏感（因为聚类中心是取平均，因此出现了 <code>K-Medoids</code>）</p>
+</li>
+<li><p>在欧式空间进行，不适用于 categorical 数据的聚类（<code>K-Medoids</code> 可以解决）。</p>
+</li>
+<li><p>收敛到局部最优解而不是全局最优解</p>
+</li>
+<li><p>要求数据为凸集</p>
+</li>
+<li><p>不能识别噪音点</p>
+</li>
+</ul>
+</li>
+<li><p>Bisecting K-Means</p>
+<ul>
+<li><p>结合了 <code>Hierarchical Clustering</code> 的思想，递增的进行聚类（先聚成 1 个类，然后 2 个，…，最后 K 个类)。</p>
+</li>
+<li><p>SSE：Sum of Squared Error</p>
+</li>
+</ul>
+</li>
+<li><p>K-Means++</p>
+<ul>
+<li><p>首先选出 K 个聚类中心，然后执行原始的 <code>K-Means</code> 算法。</p>
+</li>
+<li><p>优点：</p>
+<ul>
+<li></li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>它内在的有序性特性：下一个中心点的选择依赖于已经选择的中心点。<a href="https://blog.csdn.net/u012102306/article/details/52212870" target="_blank" rel="noopener">k-means++和k-means||</a></li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><a href="https://www.letiantian.me/2014-03-15-kmeans-kmeans-plus-plus/" target="_blank" rel="noopener">浅入浅出：从Kmeans到Kmeans++ | 樂天笔记</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>K-Medoids</p>
+<ul>
+<li><p>聚类中心只能选择数据中的点（<code>K-Means</code> 是取聚类簇的点的平均值作为新的聚类中心）。</p>
+</li>
+<li><p>这样就可以解决 <code>K-Means</code> 不能处理 categorical 类型数据的缺点（<code>K-Means</code> 需要求欧氏距离的平均值，而 categorical 类型数据的欧氏距离或平均值都没有意义）。</p>
+</li>
+<li><p>由于中心点是在已有的数据点里面选取的，因此相对于 k-means 来说，不容易受到那些由于误差之类的原因产生的 Outlier 的影响，更加 robust 一些。</p>
+</li>
+<li><p>欧氏距离 在这里也不再使用，而是使用一个 dissimilarity matrix。<a href="http://blog.pluskid.org/?p=40" target="_blank" rel="noopener">漫谈 Clustering (2): k-medoids « Free Mind</a></p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.google.com.hk/search?newwindow=1&safe=strict&q=bisecting+k-means&sa=X&ved=0ahUKEwia66f31_DbAhVMVH0KHcx8CGQQ1QIIiAEoAA&biw=1415&bih=711" target="_blank" rel="noopener">bisecting k-means - Google 搜索</a></p>
+</li>
+<li><p><a href="http://scikit-learn.org/stable/modules/clustering.html#clustering" target="_blank" rel="noopener">2.3. Clustering — scikit-learn 0.19.1 documentation</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/31296149" target="_blank" rel="noopener">k-means聚类算法优缺点？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/yixuan-xu/p/6272208.html" target="_blank" rel="noopener">K-means++</a></p>
+</li>
+<li><p><a href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering/" target="_blank" rel="noopener">Visualizing K-Means Clustering</a></p>
+</li>
+<li><p><a href="http://sofasofa.io/forum_main_post.php?postid=1000282" target="_blank" rel="noopener">K-means怎么选K?</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/24546995" target="_blank" rel="noopener">【机器学习】确定最佳聚类数目的10种方法</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spectral-Clustering"><a href="#Spectral-Clustering" class="headerlink" title="Spectral Clustering"></a>Spectral Clustering</h3><ul>
+<li><p><code>Graph Cut</code> 就是 <code>Spectral Clustering</code> 的最基本/根本/原始的思想，最终求解可以转化成图拉普拉斯矩阵（Graph Laplacin）的求解。这也是大多数博客都讲到 <code>Graph Cut</code> 的原因。<a href="https://blog.csdn.net/google19890102/article/details/45697695" target="_blank" rel="noopener">简单易学的机器学习算法——谱聚类(Spectal Clustering)</a></p>
+</li>
+<li><p>谱聚类相当于先进行 <strong>非线性</strong> 降维，使原始数据点能够线性可分，最后再使用 <code>K-Means</code> 聚类就可以得到比较好的聚类效果。 </p>
+</li>
+<li><p><strong>相似度矩阵</strong> 与 <strong>邻接矩阵</strong> 不是同一个东西：对 <strong>相似度矩阵</strong> 进行切图后得到的是 <strong>邻接矩阵</strong> 。接下来的操作都是 <strong>邻接矩阵</strong> 针对进行的。</p>
+</li>
+<li><p>优点：</p>
+<ul>
+<li><p>和 <code>K-Medoids</code> 类似，<code>Spectral Clustering</code>只需要数据之间的 <strong>相似度矩阵</strong> 就可以了，而不必像 <code>K-Means</code> 那样要求数据必须是 N 维欧氏空间中的向量。</p>
+</li>
+<li><p>由于抓住了主要矛盾，忽略了次要的东西，因此比传统的聚类算法更加健壮一些，对于不规则的误差数据不是那么敏感，而且 performance 也要好一些。许多实验都证明了这一点。事实上，在各种现代聚类算法的比较中，<code>K-Means</code> 通常都是作为 baseline 而存在的。</p>
+</li>
+<li><p>计算复杂度比 <code>K-Means</code> 要小，特别是在像文本数据或者平凡的图像数据这样维度非常高的数据上运行的时候。</p>
+</li>
+<li><p>过程对数据结构并没有太多的假设要求，如 <code>K-Means</code> 则要求数据为凸集。</p>
+</li>
+<li><p>可以通过构造稀疏 similarity graph ，使得对于更大的数据集表现出明显优于其他算法的计算速度。</p>
+</li>
+<li><p>由于<code>Spectral Clustering</code>是对图切割处理，不会存在像 <code>KMeans</code> 聚类时将离散的小簇聚合在一起的情况。</p>
+</li>
+<li><p>无需像<code>GMM</code>一样对数据的概率分布做假设。</p>
+</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li><p>对于选择不同的 similarity graph 比较敏感（如 epsilon-neighborhood， k-nearest neighborhood，fully connected等）。</p>
+</li>
+<li><p>对于参数的选择也比较敏感（如 epsilon-neighborhood的epsilon，k-nearest neighborhood的k，fully connected的 ）。</p>
+</li>
+<li><p>谱聚类的松弛条件是对原问题的一个近似，但是并不能保证该近似是合适的，其误差有可能非常大，而且导致聚类问题不稳定； </p>
+</li>
+<li><p>构造相似度矩阵的尺度参数根据经验设定，尺度参数的选择对聚类效果影响较大；</p>
+</li>
+<li><p>同其他聚类方法一样，聚类数目的选择难以确定； </p>
+</li>
+<li><p>根据图最小分割的目标函数可知，谱聚类适用于均衡分类问题，即各簇之间点的个数相差不大，对于簇之间点个数相差悬殊的聚类问题，谱聚类则不适用。 </p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="http://blog.pluskid.org/?p=287" target="_blank" rel="noopener">漫谈 Clustering (4): Spectral Clustering « Free Mind</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/pinard/p/6221564.html" target="_blank" rel="noopener">谱聚类（spectral clustering）原理总结</a></p>
+</li>
+<li><p><a href="https://calculatedcontent.com/2012/10/09/spectral-clustering/" target="_blank" rel="noopener">Spectral Clustering: A quick overview</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/sparkwen/p/3155850.html" target="_blank" rel="noopener">谱聚类算法(Spectral Clustering)</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/jteng/article/details/49590069" target="_blank" rel="noopener">谱聚类算法详解</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="DBSCAN"><a href="#DBSCAN" class="headerlink" title="DBSCAN"></a>DBSCAN</h3><ul>
+<li><p>如果 MinPts 不变，Eps 取得值过大，会导致大多数点都聚到同一个簇中，Eps 过小，会导致一个簇的分裂；如果 Eps 不变，MinPts 的值取得过大，会导致同一个簇中点被标记为离群点，MinPts 过小，会导致发现大量的核心点。<a href="http://shiyanjun.cn/archives/1288.html" target="_blank" rel="noopener">简单之美 | DBSCAN聚类算法原理及其实现</a></p>
+</li>
+<li><p>可以把<code>DBSCAN</code>看做一种<strong>树结构</strong>（非叶子节点为 core points，core points 的 Eps 区域内的点为子节点），则有：</p>
+<ul>
+<li><p>父节点和与其 <strong>直接相连</strong> 的子节点为 <strong>直接密度可达</strong>（子节点通过父节点密度可达，反过来不成立，因为子节点可能是叶节点，而叶节点不是 core points）。</p>
+</li>
+<li><p>从父节节点向下走到叶节点的路径上的节点之间是 <strong>密度可达</strong>（子节点通过父节点密度可达，反过来不成立，因为子节点可能是叶节点，而叶节点不是 core points）。</p>
+</li>
+<li><p>同一个树中的 <strong>任意</strong> 两个节点之间 <strong>互为</strong> <strong>密度相连</strong>。</p>
+</li>
+<li><p>此时，与 <code>并查集</code> 很像（但是并查集只考虑了连通性，而这里考虑了 Eps 与 MinPts）。</p>
+</li>
+<li><p>聚类簇的构建就是类似于树的构建，使用的是 <code>Breadth First Search</code>，一个聚类簇就是一棵树。</p>
+</li>
+</ul>
+</li>
+<li><p>优点：</p>
+<ul>
+<li><p>不需要事先知道要形成的簇类的数量。</p>
+</li>
+<li><p>可以对 <strong>任意形状</strong> 的稠密数据集进行聚类，相对的，<code>K-Means</code> 之类的聚类算法一般只适用于凸数据集。</p>
+</li>
+<li><p>可以在聚类的同时 <strong>识别噪声点</strong>，对数据集中的异常点不敏感。</p>
+</li>
+<li><p>聚类结果没有偏倚，相对的，<code>K-Means</code>  之类的聚类算法初始值对聚类结果有很大影响。</p>
+</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li><p>如果样本集的密度不均匀、聚类间距差相差很大时，聚类质量较差，这时用 <code>DBSCAN</code> 聚类一般不适合。<a href="https://blog.csdn.net/itplus/article/details/10088625" target="_blank" rel="noopener">聚类算法初探（五）DBSCAN</a></p>
+</li>
+<li><p>如果样本集较大时，聚类收敛时间较长，此时可以对搜索最近邻时建立的 KD tree 或者 Ball tree 进行规模限制来改进。</p>
+</li>
+<li><p>调参相对于传统的 <code>K-Means</code> 之类的聚类算法稍复杂，主要需要对距离阈值 \( \epsilon \) ，邻域样本数阈值 <code>MinPts</code> 联合调参，不同的参数组合对最后的聚类效果有较大影响。</p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://zhuanlan.zhihu.com/p/23504573" target="_blank" rel="noopener">聚类算法第三篇-密度聚类算法DBSCAN</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/itplus/article/details/10088625" target="_blank" rel="noopener">聚类算法初探（五）DBSCAN</a></p>
+</li>
+<li><p><a href="http://mccormickml.com/2016/11/08/dbscan-clustering/" target="_blank" rel="noopener">DBSCAN Clustering</a></p>
+</li>
+<li><p><a href="https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/" target="_blank" rel="noopener">Visualizing DBSCAN Clustering</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="层次聚类"><a href="#层次聚类" class="headerlink" title="层次聚类"></a>层次聚类</h3><ul>
+<li><p>不过言归正传，这里要说的 Hierarchical Clustering 从某种意义上来说也算是解决了 K 的选择问题，因为在做 Clustering 的时候并不需要知道类别数，而得到的结果是一棵树，事后可以在任意的地方横切一刀，得到指定数目的 cluster ，按需取即可。</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="http://blog.pluskid.org/?p=407" target="_blank" rel="noopener">漫谈 Clustering (5): Hierarchical Clustering « Free Mind</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/32438294" target="_blank" rel="noopener">聚类算法之层次聚类（Python实现）</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/pinard/p/6179132.html" target="_blank" rel="noopener">BIRCH聚类算法原理</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="聚类评估"><a href="#聚类评估" class="headerlink" title="聚类评估"></a>聚类评估</h3><ul>
+<li><p>有label</p>
+</li>
+<li><p>无label</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.zhihu.com/question/19635522" target="_blank" rel="noopener">如何评价聚类结果的好坏？ - 知乎</a></p>
+</li>
+<li><p><a href="http://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation" target="_blank" rel="noopener">Clustering performance evaluation</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/luoleicn/article/details/5350378" target="_blank" rel="noopener">聚类的一些评价手段</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/u012102306/article/details/52423074" target="_blank" rel="noopener">聚类算法评价指标</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="http://blog.pluskid.org/?page_id=78" target="_blank" rel="noopener">漫谈 Clustering 系列 « Free Mind</a></p>
+</li>
+<li><p><a href="http://yongyuan.name/pcvwithpython/chapter6.html#sec-6-3" target="_blank" rel="noopener">Python计算机视觉编程 - 第六章 图像聚类</a></p>
+</li>
+<li><p><a href="http://lib.csdn.net/article/machinelearning/35273" target="_blank" rel="noopener">5、聚类之层次聚类、基于划分的聚类（k-means）、基于密度的聚类、基于模型的聚类</a></p>
+</li>
+</ul>
+<h1 id="Supervised"><a href="#Supervised" class="headerlink" title="Supervised"></a>Supervised</h1><h2 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h2><h3 id="LR"><a href="#LR" class="headerlink" title="LR"></a>LR</h3><ul>
+<li><p>用于解决二分类</p>
+</li>
+<li><p>可以认为是在 <code>线性回归</code> 的基础上添加了一个 <code>Sigmoid</code> 函数，即把 <code>线性回归</code> 的输出作为 <code>Sigmoid</code> 的输入，<code>Sigmoid</code> 的输出作为最终的结果。</p>
+<p>  \[ g(x) = \frac {1} {1 + e^{-x}} \]</p>
+<p>  \[ g’(x) = g(x) \cdot (1 - g(x)) \]</p>
+</li>
+<li><p>概率函数如下。$ h_\theta(x) $ 函数的值有特殊的含义，它表示结果取 1 的概率。</p>
+<p>  \[ P(y|x;\theta) = (h_\theta(x))^y \cdot (1 - h_\theta(x))^{1-y}，y \in {0, 1 } \]</p>
+</li>
+<li><p>使用交叉熵 (Cross Entropy) 作为损失函数</p>
+<ul>
+<li><p>为什么使用它作为 loss function？</p>
+<p>答案：来源于最大释然估计。</p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://blog.csdn.net/programmer_wei/article/details/52072939" target="_blank" rel="noopener">Logistic Regression（逻辑回归）原理及公式推导</a></p>
+</li>
+<li><p><a href="https://juejin.im/post/5a87a7026fb9a063475f8706" target="_blank" rel="noopener">机器学习基本算法系列之逻辑回归</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/28408516" target="_blank" rel="noopener">逻辑回归（Logistic Regression）（一）</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/23666587" target="_blank" rel="noopener">机器学习中的logistic regression的sigmoid函数如何解释？为啥要用它？ - 知乎</a></p>
+</li>
+<li><p><a href="https://stats.stackexchange.com/questions/162988/why-sigmoid-function-instead-of-anything-else" target="_blank" rel="noopener">logistic - Why sigmoid function instead of anything else? - Cross Validated</a></p>
+</li>
+<li><p><a href="https://www.google.com.hk/search?newwindow=1&safe=strict&source=hp&ei=G6KtW63_KIOT8wXE_JXoCg&q=svm+lr&oq=svm+lr&gs_l=psy-ab.3..0i7i30k1l2j0l2j0i8i30k1l2.991.2254.0.3055.6.6.0.0.0.0.647.647.5-1.1.0....0...1c.1j4.64.psy-ab..5.1.646....0.5beivWDSSAI" target="_blank" rel="noopener">svm lr - Google 搜索</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Softmax回归"><a href="#Softmax回归" class="headerlink" title="Softmax回归"></a>Softmax回归</h3><ul>
+<li><p>当类别数 \( k = 2 \) 时，softmax 回归退化为 logistic 回归。这表明 softmax 回归是 logistic 回归的一般形式。</p>
+</li>
+<li><p>Softmax 回归 vs. k 个二元分类器：这一选择取决于你的类别之间是否互斥。</p>
+</li>
+</ul>
+<h2 id="多层感知机"><a href="#多层感知机" class="headerlink" title="多层感知机"></a>多层感知机</h2><ul>
+<li><p><a href="https://plushunter.github.io/2017/02/10/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97%EF%BC%889%EF%BC%89%EF%BC%9A%E6%84%9F%E7%9F%A5%E6%9C%BA/" target="_blank" rel="noopener">机器学习算法系列（9）：感知机</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/36241719" target="_blank" rel="noopener">感知机的损失函数为什么可以采用函数间隔(忽略1/||w||)? - 知乎</a></p>
+</li>
+</ul>
+<h3 id="贝叶斯"><a href="#贝叶斯" class="headerlink" title="贝叶斯"></a>贝叶斯</h3><ul>
+<li><p>生成模型</p>
+</li>
+<li><p>\( P(Y | X) = P(X \cdot Y) / P(X) = P(X | Y) \cdot P(Y) / P(X) \propto P(X | Y) \cdot P(Y) \)</p>
+</li>
+<li><p>假设某个体有 \( n \) 项特征（Feature），分别为 \( F_1、F_2、…、F_n \)。现有 \( m \) 个类别（Category），分别为 \( C_1、C_2、…、C_m \) 。贝叶斯分类器就是计算出概率最大的那个分类，也就是求下面这个算式的最大值：</p>
+<p>\[<br>P(C|F_1F_2…F_n) = P(F_1F_2…F_n|C) \cdot P(C) / P(F_1F_2…F_n)<br>\]</p>
+<p>由于 $ P(F_1F_2…F_n) $ 对于所有的类别都是相同的，可以省略，问题就变成了求 </p>
+<p>\[ P(F_1F_2…F_n|C) \cdot P(C) \]</p>
+<p>的最大值。</p>
+<p>朴素贝叶斯分类器则是更进一步，假设所有特征都彼此<strong>条件独立</strong>，因此</p>
+<p>\[<br>P(F_1F_2…F_n|C) \cdot P(C) = P(F_1|C)P(F_2|C) … P(F_n|C) \cdot P(C)<br>　\]<br>　<br>　上式等号右边的每一项，都可以从统计资料中得到，由此就可以计算出每个类别对应的概率，从而找出最大概率的那个类。</p>
+</li>
+<li><p>如何处理连续变量？</p>
+<ul>
+<li><p>离散化</p>
+</li>
+<li><p>如果无法离散化，解决办法见第一个参考。</p>
+</li>
+</ul>
+</li>
+<li><p>Laplace 校准</p>
+<p>另一个需要讨论的问题就是当 \( P(a|y)=0 \) 怎么办，当某个类别下某个特征项划分没有出现时，就是产生这种现象，这会令分类器质量大大降低。为了解决这个问题，我们引入 <code>Laplace校准</code>，它的思想非常简单，就是对每类别下所有划分的计数加 1，这样如果训练样本集数量充分大时，并不会对结果产生影响，并且解决了上述频率为 0 的尴尬局面。[2]</p>
+</li>
+<li><p>贝叶斯网络</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="http://www.ruanyifeng.com/blog/2013/12/naive_bayes_classifier.html" target="_blank" rel="noopener">朴素贝叶斯分类器的应用 - 阮一峰的网络日志</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/17/1829190.html" target="_blank" rel="noopener">算法杂货铺——分类算法之朴素贝叶斯分类(Naive Bayesian classification)</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2011/08/bayesian_inference_part_one.html" target="_blank" rel="noopener">贝叶斯推断及其互联网应用（一）：定理简介 - 阮一峰的网络日志</a></p>
+</li>
+<li><p><a href="http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/" target="_blank" rel="noopener">数学之美番外篇：平凡而又神奇的贝叶斯方法 – 刘未鹏 | Mind Hacks</a></p>
+</li>
+<li><p><a href="http://www.nowozin.net/sebastian/blog/drafts/do-bayesians-overfit.html" target="_blank" rel="noopener">Do Bayesians Overfit? - Sebastian Nowozins slow blog</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><ul>
+<li><p><img src="https://www.tuchuang001.com/images/2018/07/09/161efc4f7b5e4af2.png" alt="dt"></p>
+</li>
+<li><p>决策树的特征分裂选择是”贪心“算法，也就是没有回溯的。</p>
+</li>
+<li><p>决策树类型的算法几乎不对数据的分布做任何统计学假设，这使它们能拟合复杂的非线性函数。</p>
+</li>
+<li><p>ID3</p>
+<ul>
+<li><p>假设有一堆样本 \( D \)，那么 \( D \) 的熵：</p>
+<p>\[ H(D)=-\sum_{i=1}^{m}{p_ilog_2(p_i)} \]</p>
+<p>把 \( D \) 按照 特征 \( A \) 分割后，得到的总体的熵（各个部分的熵的加权和）：</p>
+<p>\[ H(D|A) = \sum_{j=1}^{v} \frac{|D_j|}{|D|} H(D_j) \]</p>
+<p>信息增益：</p>
+<p>\[ Gain(A) = H(D) - H(D|A) \]</p>
+</li>
+<li><p><code>ID3</code> 算法就相当于选择一个特征进行分割，使得分割后的各个部分的 <strong>熵之和</strong> 最低，也就是 <strong>信息增益</strong>（原始的熵 - 分割后的各个部分的熵之和）最大。因为有多个特征可以选择，所以这里就选择使得信息增益 <strong>最大</strong> 的那个特征进行分割。</p>
+</li>
+<li><p>特征为连续值的情况，需要对特征进行 <strong>离散化</strong> 处理。</p>
+</li>
+<li><p>但是 <code>ID3</code> 算法倾向于选择特征的取值比较多的那个特征进行分割，导致训练出来的树非常的宽，然而深度不深，非常容易导致过拟合。所以有了 <code>C4.5</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>C4.5</p>
+<ul>
+<li><p><code>C4.5</code> 用 <strong>信息增益比</strong> 来决定对哪一个特征进行分割。</p>
+<p>算法中定义了 <strong>分裂信息</strong>：</p>
+<p>\[ SplitInfo(A)=-\sum_{j=1}^{v}{\frac{|D_j|}{|D|}log_2{\frac{|D_j|}{|D|}}} \]</p>
+<p>然后，通过该信息，定义 <strong>信息增益比</strong> 为：<br>\[ GainRatio(A)=\frac{Gain(A)}{SplitInfo(A)} \]</p>
+<p><code>C4.5</code> 选择信息增益比 <strong>最大</strong> 的特征作为分裂特征，而其余步骤和 <code>ID3</code> 完全一致。</p>
+</li>
+<li><p>采用信息增益比则有效地抑制了 <code>ID3</code> 倾向于选择取值比较多的特征进行分割的缺点：取值多的特征，以它作为根节点的单节点树的熵很大，即 \( H_A(D) \) 较大，导致信息增益比减小，在特征选择上会更加合理。</p>
+</li>
+</ul>
+</li>
+<li><p>CART</p>
+<ul>
+<li><p><code>CART</code> 在选择分裂节点的时候，用 <strong>基尼指数（Gini）</strong> 来挑选最合适的特征进行分裂。<br>\[ Gini(D) = 1 - \sum_{j=1}^{N}{P_j^2} \]</p>
+<p>其中，\( P_j \) 表示每个类别出现的概率。 同熵一样，<strong>基尼指数</strong> 的值越小，样本越纯。</p>
+</li>
+<li><p>对于分裂后整体的基尼指数，同样是先计算各个分裂部分的基尼指数，然后求加权和：</p>
+<p>\[ Gini(D, A) = \sum_{j}^{k}{\frac{|D_j|}{|D|}} Gini(D_j) \]</p>
+</li>
+<li><p>与 <code>ID3</code> 不同的是，如果特征的类别超过两类，<code>CART</code> 不会根据特征的所有类别分出子树，而是选择其中的一个类别，根据是否属于这个类别分成两棵子树。也就是说 <code>CART</code> 每一个非叶子节点只有两个分支，所以 <code>CART</code> 是一棵 <strong>二叉树</strong>。</p>
+</li>
+<li><p>这里还需要注意一点，在 <code>ID3</code> 中，已经选择过的特征是没法在之后的节点分裂中被选上的，即每个特征只能被挑选一次。但 <code>CART</code> 没有这种限制，每次都是将所有特征放在一起，通过 <strong>基尼指数</strong> 选出最好的，哪怕这个特征已经在之前被挑选过了。</p>
+</li>
+</ul>
+</li>
+<li><p>算法的终止条件</p>
+<ul>
+<li><p>分割得到的部分只含有一个类别。</p>
+</li>
+<li><p>没有多余的特征可以分了，此时按照 voting 的方式决定这个部分的类别。（<code>ID3</code> 中用过的特征不能在接下的分割中使用，但是 <code>C4.5</code> 没有这样的情况）。</p>
+</li>
+</ul>
+</li>
+<li><p>剪枝：防止过拟合</p>
+<ul>
+<li><p>前剪枝</p>
+</li>
+<li><p>后剪枝</p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="http://jermmy.xyz/2017/04/13/2017-4-13-decision-tree/" target="_blank" rel="noopener">决策树生成算法</a></p>
+</li>
+<li><p><a href="https://applenob.github.io/decision_tree.html#CART%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">决策树基础</a></p>
+</li>
+<li><p><a href="https://yongyuan.name/blog/decision-tree.html" target="_blank" rel="noopener">数据分类：决策树</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h3><h4 id="Averaging（各个弱学习器之间-没有-依赖关系）"><a href="#Averaging（各个弱学习器之间-没有-依赖关系）" class="headerlink" title="Averaging（各个弱学习器之间 没有 依赖关系）"></a>Averaging（各个弱学习器之间 <strong>没有</strong> 依赖关系）</h4><ul>
+<li><p>Bagging</p>
+<ul>
+<li><p>随机森林</p>
+<ul>
+<li><p>各个决策树之间相互独立。每棵决策树都尽最大程度的生长，并且 <strong>没有剪枝</strong> 过程。</p>
+</li>
+<li><p><strong>随机</strong> 的 <strong>有放回</strong> 的抽取训练样本。</p>
+</li>
+<li><p>如果不进行随机抽样，每棵树的训练集都一样，那么最终训练出的树分类结果也是完全一样的，这样的话完全没有 bagging 的必要；</p>
+</li>
+<li><p>如果不是有放回的抽样，那么每棵树的训练样本都是不同的，都是没有交集的，这样每棵树都是”有偏的”，都是绝对”片面的”（当然这样说可能不对），也就是说每棵树训练出来都是有很大的差异的；而随机森林最后分类取决于多棵树（弱分类器）的投票表决，这种表决应该是”求同”，因此使用完全不同的训练集来训练每棵树这样对最终分类结果是没有帮助的，这样无异于是”盲人摸象”。</p>
+</li>
+<li><p>也可以对特征进行抽样（即不一定用上所有的特征）。</p>
+<ul>
+<li><p>降低时间复杂度</p>
+</li>
+<li><p>增加不同模型之间的差异性，降低过拟合的程度（如果有一个特征和标签特别强相关。选择划分特征时，如果不随机的从所用特征中随机取一些特征的话，那么每一次那个强相关特征都会被选取。那么每个数都会是一样的。这就是随机森林随机选取一些特征的作用，让某些树，不选这个强相关特征。）</p>
+</li>
+</ul>
+</li>
+<li><p><a href="https://www.cnblogs.com/maybe2030/p/4585705.html" target="_blank" rel="noopener">[Machine Learning &amp; Algorithm] 随机森林（Random Forest）</a></p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/26683576" target="_blank" rel="noopener">【scikit-learn文档解析】集成方法 Ensemble Methods（上）：Bagging与随机森林</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Boosting（各个弱学习器之间-有-依赖关系）"><a href="#Boosting（各个弱学习器之间-有-依赖关系）" class="headerlink" title="Boosting（各个弱学习器之间 有 依赖关系）"></a>Boosting（各个弱学习器之间 <strong>有</strong> 依赖关系）</h4><ul>
+<li><p>Boosting 是提升的意思。怎么提升？做法就是在前一次的训练的基础上，对某些分错的样本进行着重的训练。</p>
+</li>
+<li><p>Adaboost</p>
+<ul>
+<li><a href="https://www.cnblogs.com/pinard/p/6133937.html" target="_blank" rel="noopener">集成学习之Adaboost算法原理小结</a></li>
+</ul>
+</li>
+<li><p>Gradient boosting</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="http://www.52caml.com/head_first_ml/ml-chapter6-boosting-family/" target="_blank" rel="noopener">第06章：深入浅出ML之Boosting家族</a></p>
+</li>
+<li><p><a href="https://lidongxuan.github.io/blog/boosting" target="_blank" rel="noopener">机器学习：集成学习算法Bagging，Boosting</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/pinard/p/6140514.html" target="_blank" rel="noopener">梯度提升树(GBDT)原理小结</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Bagging-vs-Boosting"><a href="#Bagging-vs-Boosting" class="headerlink" title="Bagging vs Boosting"></a>Bagging vs Boosting</h4><ul>
+<li><p>区别</p>
+<ul>
+<li><p>样本选择上：</p>
+<p>  Bagging：训练集是在原始集中 <strong>有放回</strong> 选取的，从原始集中选出的各轮训练集之间是 <strong>独立</strong> 的。</p>
+<p>  Boosting：每一轮的训练集不变，只是训练集中每个样例在分类器中的权重发生变化。而权值是根据上一轮的分类结果进行调整。</p>
+</li>
+<li><p>样例权重：</p>
+<p>  Bagging：使用均匀取样，每个样例的权重相等</p>
+<p>  Boosting：根据错误率不断调整样例的权值，错误率越大则权重越大。</p>
+</li>
+<li><p>预测函数：</p>
+<p>  Bagging：所有预测函数的权重相等。</p>
+<p>  Boosting：每个弱分类器都有相应的权重，对于分类误差小的分类器会有更大的权重。</p>
+</li>
+<li><p>并行计算：</p>
+<p>  Bagging：各个预测函数可以并行生成</p>
+<p>  Boosting：各个预测函数只能顺序生成，因为后一个模型参数需要前一轮模型的结果。</p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.cnblogs.com/liuwu265/p/4690486.html" target="_blank" rel="noopener">Bagging和Boosting 概念及区别</a></p>
+</li>
+<li><p><a href="https://www.quora.com/What-is-the-difference-between-gradient-boosting-and-adaboost" target="_blank" rel="noopener">What is the difference between gradient boosting and adaboost? - Quora</a></p>
+</li>
+<li><p><a href="https://stats.stackexchange.com/questions/164233/intuitive-explanations-of-differences-between-gradient-boosting-trees-gbm-ad" target="_blank" rel="noopener">Intuitive explanations of differences between Gradient Boosting Trees (GBM) &amp; Adaboost</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/54626685" target="_blank" rel="noopener">机器学习算法中GBDT与Adaboost的区别与联系是什么？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/46784781" target="_blank" rel="noopener">基于树的adaboost和Gradient Tree Boosting区别？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.google.com/search?newwindow=1&source=hp&ei=eaatW92bIMja8QX0spvoCw&q=+GBDT%E4%B8%8EXGBoost%E7%9A%84%E5%8C%BA%E5%88%AB&oq=+GBDT%E4%B8%8EXGBoost%E7%9A%84%E5%8C%BA%E5%88%AB&gs_l=psy-ab.3..0.377061.377061.0.377874.1.1.0.0.0.0.768.768.6-1.1.0....0...1c..64.psy-ab..0.1.768....0.OhOuQDS0Np4" target="_blank" rel="noopener">GBDT与XGBoost的区别 - Google 搜索</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Other"><a href="#Other" class="headerlink" title="Other"></a>Other</h2><h3 id="Cross-Entropy-vs-Log-Likelihood"><a href="#Cross-Entropy-vs-Log-Likelihood" class="headerlink" title="Cross Entropy vs Log Likelihood"></a>Cross Entropy vs Log Likelihood</h3><ul>
+<li><p><code>LR</code> 虽然是一个二分类器，但是它的输出是 <strong>一个</strong> 标量（经过 <code>sigmoid</code> 处理过的），所以它的 loss function 是 <code>Cross Entropy</code>；相对的 <code>softmax regression</code> 是多分类器，输出的是k个标量（且k个标量的和为1，也就是说每个输出都是互斥的），因而不能用 <code>Cross Entropy</code>，而要用 <code>Log Likelihood</code>。</p>
+</li>
+<li><p>因为上面的原因，对于多分类的问题：</p>
+<ul>
+<li><p>如果类别是<strong>互斥</strong>，用 <a href="https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits" target="_blank" rel="noopener">tf.nn.softmax_cross_entropy_with_logits</a></p>
+</li>
+<li><p>否则，用 <a href="https://www.tensorflow.org/api_docs/python/tf/nn/sigmoid_cross_entropy_with_logits" target="_blank" rel="noopener">tf.nn.sigmoid_cross_entropy_with_logits</a></p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.google.com.hk/search?newwindow=1&safe=strict&hl=zh-CN&source=hp&ei=qt4gW9qpO4WUvQTuxZSoBQ&q=cross+entropy+log+likelihood&oq=cross+entropy+log+li&gs_l=psy-ab.3.0.0j0i8i30k1l2.700.6403.0.7778.15.15.0.0.0.0.427.2220.3-5j1.6.0....0...1c.1.64.psy-ab..9.6.2220...0i131k1j0i30k1j0i5i30k1.0.rczRuGxat_4" target="_blank" rel="noopener">cross entropy log likelihood - Google 搜索</a></p>
+</li>
+<li><p><a href="https://datascience.stackexchange.com/questions/9302/the-cross-entropy-error-function-in-neural-networks" target="_blank" rel="noopener">The cross-entropy error function in neural networks</a></p>
+</li>
+<li><p><a href="https://stats.stackexchange.com/questions/198038/cross-entropy-or-log-likelihood-in-output-layer" target="_blank" rel="noopener">neural networks - Cross-Entropy or Log Likelihood in Output layer - Cross Validated</a></p>
+</li>
+<li><p><a href="https://stats.stackexchange.com/questions/223799/different-definitions-of-the-cross-entropy-loss-function/224491#224491" target="_blank" rel="noopener"></a></p>
+</li>
+<li><p><a href="https://www.reddit.com/r/learnmachinelearning/comments/88g8zf/difference_between_binary_cross_entropy_and/" target="_blank" rel="noopener">Difference between binary cross entropy and categorical cross entropy? : learnmachinelearning</a></p>
+</li>
+<li><p><a href="https://weibo.com/ttarticle/p/show?id=2309404047468714166594" target="_blank" rel="noopener">TensorFlow四种Cross Entropy算法实现和应用</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/u012162613/article/details/44239919" target="_blank" rel="noopener">交叉熵代价函数</a></p>
+</li>
+<li><p><a href="https://sthsf.github.io/wiki/Algorithm/DeepLearning/Tensorflow%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Tensorflow%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86---%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3.html#cross_entropy" target="_blank" rel="noopener">Tensorflow基础知识—损失函数详解 - LiYu’s personal knowledge wiki</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="机器学习性能评估指标"><a href="#机器学习性能评估指标" class="headerlink" title="机器学习性能评估指标"></a>机器学习性能评估指标</h3><ul>
+<li><p>针对<strong>二元</strong>分类器</p>
+</li>
+<li><p>混淆矩阵</p>
+<p>FP：预测为 <code>正例</code>，但是它是 <code>负例</code>。</p>
+</li>
+<li><p>准确率(Accuracy)</p>
+</li>
+<li><p>精确率(Precision) </p>
+<ul>
+<li>针对 <strong>预测结果</strong> 而言，<code>正确预测的正例</code> 占 <code>预测的正例</code> 的百分比。</li>
+</ul>
+</li>
+<li><p>召回率(Recall)</p>
+<ul>
+<li>针对 <strong>样本</strong> 而言，<code>正确预测的正例</code> 占 <code>样本中真正的正例</code> 的百分比</li>
+</ul>
+</li>
+<li><p>F1 值</p>
+<ul>
+<li><code>精确率</code> 和 <code>召回率</code> 两者是互斥的关系：一个变高，另一个就会变低。为了在两者都要求高的情况下，可以用 <code>F1</code> 来衡量。精确率和召回率都高时，F1值也会高。</li>
+</ul>
+</li>
+<li><p>ROC</p>
+<ul>
+<li><p>TPR：就是召回率。</p>
+</li>
+<li><p>FPR：<code>错误预测的正例</code> 占 <code>样本中真正的负例</code> 的百分比。（与召回率对应）</p>
+</li>
+<li><p>越靠近 <code>左上角</code>，表明模型的性能越好。</p>
+</li>
+<li><p><code>ROC</code> 曲线不会随训练数据中正负样本的比例的变化而变化。</p>
+</li>
+<li><p>虽然 <code>ROC</code> 曲线相比较于 Precision 和 Recall 等衡量指标更加合理，但是其在高不平衡数据条件下的的表现仍然过于理想，不能够很好的展示实际情况。</p>
+</li>
+<li><p>在多类别分类任务中你如何绘制 ROC 曲线？</p>
+</li>
+</ul>
+</li>
+<li><p>AUC</p>
+<ul>
+<li><code>AUC</code> 是指： 随机给定一个正样本和一个负样本，分类器 <code>输出该正样本为正的概率值</code> 比 <code>分类器输出该负样本为正的概率值</code> 要大的可能性。</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://charleshm.github.io/2016/03/Model-Performance/" target="_blank" rel="noopener">机器学习性能评估指标</a></p>
+</li>
+<li><p><a href="http://alexkong.net/2013/06/introduction-to-auc-and-roc/" target="_blank" rel="noopener">ROC和AUC介绍以及如何计算AUC</a></p>
+</li>
+<li><p><a href="http://www.csuldw.com/2016/03/12/2016-03-12-performance-evaluation/" target="_blank" rel="noopener">分类之性能评估指标 | D.W’s Notes - Machine Learning</a></p>
+</li>
+<li><p><a href="https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc?hl=zh-cn" target="_blank" rel="noopener">分类 (Classification)：ROC 和曲线下面积  |  机器学习速成课程  |  Google Developers</a></p>
+</li>
+<li><p><a href="https://en.wikipedia.org/wiki/Precision_and_recall" target="_blank" rel="noopener">Precision and recall - Wikipedia</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="L1-vs-L2"><a href="#L1-vs-L2" class="headerlink" title="L1 vs L2"></a>L1 vs L2</h3><ul>
+<li><p>两者都是用来防止过拟合的，做法就是在loss function中加上对权重参数的惩罚项。</p>
+</li>
+<li><p><code>L1</code> 与 <code>L2</code> 的区别：</p>
+<ul>
+<li><p>画那个图</p>
+</li>
+<li><p>从梯度下降的偏导数比较：</p>
+<ul>
+<li><p><code>L1</code> 总会减去一个固定的数值</p>
+</li>
+<li><p><code>L2</code> 总是缩小为原来的固定倍数</p>
+</li>
+</ul>
+</li>
+<li><p><code>L1</code> 倾向于使得权重变成 $ 0 $ （因而有特征选择的功能），<code>L2</code> 倾向于选择较小的权重。</p>
+</li>
+</ul>
+</li>
+<li><p>所以(不失一般性，假定：wi等于不为0的某个正的浮点数，学习速率η 为0.5)：</p>
+<p>L1的权值更新公式为wi = wi - η * 1  = wi - 0.5 * 1，也就是说权值每次更新都固定减少一个特定的值(比如0.5)，那么经过若干次迭代之后，权值就有可能减少到0。</p>
+<p>L2的权值更新公式为wi = wi - η * wi = wi - 0.5 * wi，也就是说权值每次都等于上一次的1/2，那么，虽然权值不断变小，但是因为每次都等于上一次的一半，所以很快会收敛到较小的值但不为0。</p>
+<p>$$<br>\begin{align<em>}<br>L_1 &amp;= |w_1| + |w_2| + … + |w_n|, \frac{\partial L_1}{\partial w_i} = sign(w_i) = -1 or 1 \<br>L_2 &amp;= \frac{1}{2} (w_{1}^{2} + w_{2}^{2} + … + w_{n}^{2}), \frac{\partial L_2}{\partial w_i} = w_i<br>\end{align</em>}<br>$$</p>
+</li>
+<li><p>L1 不可导</p>
+<ul>
+<li><a href="https://www.google.com/search?newwindow=1&safe=strict&ei=R9dwW_68L4uW0gKPnY6gBg&q=L1+%E4%B8%8D%E5%8F%AF%E5%AF%BC&oq=L1+%E4%B8%8D%E5%8F%AF%E5%AF%BC&gs_l=psy-ab.3...535801.537986.0.538207.7.7.0.0.0.0.918.918.6-1.1.0....0...1c.1.64.psy-ab..6.0.0....0.pt7EAgJBcvE" target="_blank" rel="noopener">L1 不可导 - Google 搜索</a></li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://liam0205.me/2017/03/30/L1-and-L2-regularizer/" target="_blank" rel="noopener">谈谈 L1 与 L2-正则项 | 始终</a></p>
+</li>
+<li><p><a href="https://vimsky.com/article/969.html" target="_blank" rel="noopener">为什么L1稀疏，L2平滑？</a></p>
+</li>
+<li><p><a href="http://www.cnblogs.com/heguanyou/p/7688344.html" target="_blank" rel="noopener">Laplace（拉普拉斯）先验与L1正则化</a></p>
+</li>
+<li><p><a href="https://cs231n.github.io/neural-networks-2/#reg" target="_blank" rel="noopener">CS231n Convolutional Neural Networks for Visual Recognition</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="过拟合，欠拟合"><a href="#过拟合，欠拟合" class="headerlink" title="过拟合，欠拟合"></a>过拟合，欠拟合</h2><ul>
+<li><p>过拟合的本质：相对于数据规模，但是模型复杂度过高，导致模型过分地学习了训练样本中的噪音，从而削弱了模型的泛化能力。参数太多，模型复杂度过高，同时数据相对较少，或噪声相对较多。</p>
+</li>
+<li><p>为什么权重接近 0 的时候能防止过拟合？</p>
+<ul>
+<li><p>最简单的解释就是加了先验。在数据少的时候，先验知识可以防止过拟合。最小二乘回归问题：加2范数正则等价于加了高斯分布的先验，加1范数正则相当于加拉普拉斯分布先验。</p>
+</li>
+<li><p>能够使得权重变得很小，这样就可以使得每个权重起到的作用都差不多，不会出现某些权重很大，某些权重非常小，导致对噪音比较敏感。这样就可以减轻过拟合（对 <code>L1</code> 和 <code>L2</code> 都是这样的道理）。</p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/20700829/answer/119314862" target="_blank" rel="noopener">机器学习中使用正则化来防止过拟合是什么原理？</a></p>
+</li>
+<li><p><a href="http://www.cnblogs.com/heguanyou/p/7688344.html" target="_blank" rel="noopener">Laplace（拉普拉斯）先验与L1正则化</a></p>
+</li>
+<li><p><a href="https://www.google.com.hk/search?newwindow=1&safe=strict&source=hp&ei=w4d5W6LpB-ar0PEP8bS_wAU&q=%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87+%E5%90%8E%E9%AA%8C%E6%A6%82%E7%8E%87+%E4%BC%BC%E7%84%B6%E6%A6%82%E7%8E%87&oq=%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87&gs_l=psy-ab.3.3.0l5.283.3573.0.5812.15.11.0.0.0.0.541.1399.4-2j1.4.0....0...1c.1j4.64.psy-ab..11.3.1398.0..0i10k1.439.Y0qCp-6wkco" target="_blank" rel="noopener">先验概率 后验概率 似然概率 - Google 搜索</a></p>
+</li>
+</ul>
+</li>
+<li><p>减轻过拟合的方法</p>
+<ul>
+<li><p>正则化</p>
+</li>
+<li><p>dropout</p>
+</li>
+<li><p>early stopping（根据验证数据集的效果好坏评价是否过拟合）</p>
+</li>
+<li><p>cross validation（相当于增加数据集）</p>
+</li>
+<li><p>data augmentation</p>
+</li>
+<li><p>减少特征的数量</p>
+</li>
+<li><p>降低模型的复杂度</p>
+</li>
+<li><p>当然，尽可能的扩大 training dataset 才是王道。</p>
+</li>
+<li><p>在训练之前记得 shuffle 一下数据集，一般是每次训练一个 epoch（就是把 training dataset 训练了一遍）后就 shuffle 一次，但是对于较大的数据集可以只 shuffle 一次，虽然这样会使得训练在第二个 epoch 就变得 biased，但是带来的好处可以 overcome 这种缺陷。</p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000012474411" target="_blank" rel="noopener">机器学习面试基础知识 &amp; 扩展-01 - 深度学习初探</a></p>
+</li>
+</ul>
+</li>
+<li><p>欠拟合的解决办法</p>
+<ul>
+<li><p>增大训练时间</p>
+</li>
+<li><p>增加特征的数量</p>
+</li>
+<li><p>增大模型复杂度</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Bias-Variance-Tradeoff"><a href="#Bias-Variance-Tradeoff" class="headerlink" title="Bias-Variance Tradeoff"></a>Bias-Variance Tradeoff</h2><ul>
+<li><p><code>Bias</code> : “用所有可能的训练数据集训练出的所有模型的输出的平均值” 与 “真实模型” 的输出值之间的差异。</p>
+</li>
+<li><p><code>Variance</code> : <strong>不同的训练数据集</strong> 训练出的模型的输出值之间的差异。</p>
+</li>
+<li><p>说到底就是模型的拟合程度的选择问题：模型训练的效果太好，可能过拟合，generalization 比较差；反过来，想要模型的 generalization 好，就不能训练的太好（防止过拟合），但这样可能又会产生欠拟合。（正因为如此，我们才需要每训练一段事件就在 test 训练数据集上跑一下模型，来大概的表示模型的 generalization 能力。）</p>
+</li>
+<li><p>模型的 loss 包括 3 部分：<code>Bias</code>, <code>Variance</code>, <code>Noise</code>。Noise 没法控制，所以只能权衡 bias 和 variance。（也就是上面说的用 test 数据集来测试模型的 generalizaiton 能力。）</p>
+</li>
+<li><p>解决办法</p>
+<ul>
+<li><p>cross validation</p>
+<ul>
+<li><p>train-test</p>
+</li>
+<li><p>leave one</p>
+</li>
+<li><p>k-fold</p>
+</li>
+</ul>
+</li>
+<li><p>这些方法都是为了使用一个 test 数据集来验证模型的 generalizaiton 能力。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="https://liam0205.me/2017/03/25/bias-variance-tradeoff/" target="_blank" rel="noopener">谈谈 Bias-Variance Tradeoff | 始终</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/27068705" target="_blank" rel="noopener">机器学习中的Bias(偏差)，Error(误差)，和Variance(方差)有什么区别和联系？ - 知乎</a></p>
+</li>
+</ul>
+<h2 id="判别模型和生成模型对比"><a href="#判别模型和生成模型对比" class="headerlink" title="判别模型和生成模型对比"></a>判别模型和生成模型对比</h2><ul>
+<li><p>本质区别</p>
+<ul>
+<li><p>discriminative model 估计的是条件概率分布(conditional distribution)p(class|context)；generative model 估计的是联合概率分布（joint probability distribution）p(class, context)。</p>
+</li>
+<li><p>生成模型，就是生成（数据的分布）的模型；判别模型，就是判别（数据输出量）的模型；</p>
+</li>
+</ul>
+</li>
+<li><p>只要过程中要求解联合概率分布（或者数据的分布）的都是生成模型</p>
+</li>
+<li><p><code>GAN/VAE</code> 都是试图生成数据的概率分布，所以是一种生成模型。</p>
+</li>
+<li><p>比较</p>
+<ul>
+<li><p>训练时，二者优化准则不同</p>
+<p>生成模型优化训练数据的联合分布概率；</p>
+<p>判别模型优化训练数据的条件分布概率，判别模型与序列标记问题有较好的对应性。</p>
+</li>
+<li><p>对于观察序列的处理不同</p>
+<p>生成模型中，观察序列作为模型的一部分；</p>
+<p>判别模型中，观察序列只作为条件，因此可以针对观察序列设计灵活的特征。</p>
+</li>
+<li><p>训练复杂度不同</p>
+<p>判别模型训练复杂度较高。</p>
+</li>
+<li><p>是否支持无指导训练</p>
+<p>生成模型支持无指导训练。</p>
+</li>
+</ul>
+</li>
+<li><p>另外，由生成模型可以得到判别模型，但由判别模型得不到生成模型。</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.zhihu.com/question/20446337" target="_blank" rel="noopener">机器学习“判定模型”和“生成模型”有什么区别？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.quora.com/What-is-a-generative-model" target="_blank" rel="noopener">What is a generative model? - Quora</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Graph-Model"><a href="#Graph-Model" class="headerlink" title="Graph Model"></a>Graph Model</h1><h2 id="Hidden-Markov-Model"><a href="#Hidden-Markov-Model" class="headerlink" title="Hidden Markov Model"></a>Hidden Markov Model</h2><ul>
+<li><p>图模型，有向图</p>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://watsonyanghx.github.io/2017/01/16/Hidden-Markov-Model/">Hidden Markov Model | WatsonYang’s Blog</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/20962240" target="_blank" rel="noopener">如何用简单易懂的例子解释隐马尔可夫模型？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/20136144" target="_blank" rel="noopener">谁能通俗的讲解下viterbi算法？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/pinard/p/6945257.html" target="_blank" rel="noopener">隐马尔科夫模型HMM（一）HMM模型</a></p>
+</li>
+<li><p><a href="https://yanyiwu.com/work/2014/04/07/hmm-segment-xiangjie.html" target="_blank" rel="noopener">中文分词之HMM模型详解</a> </p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Conditional-Random-Fields"><a href="#Conditional-Random-Fields" class="headerlink" title="Conditional Random Fields"></a>Conditional Random Fields</h2><ul>
+<li><p><a href="https://www.zhihu.com/question/35866596" target="_blank" rel="noopener">如何用简单易懂的例子解释条件随机场（CRF）模型？它和HMM有什么区别？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/Determined22/p/6915730.html" target="_blank" rel="noopener">NLP —— 图模型（二）条件随机场（Conditional random field，CRF）</a></p>
+</li>
+<li><p><a href="https://applenob.github.io/crf.html" target="_blank" rel="noopener">条件随机场CRF总结和实现</a></p>
+</li>
+<li><p><a href="https://www.research.ed.ac.uk/portal/files/10482724/crftut_fnt.pdf" target="_blank" rel="noopener">An Introduction to Conditional Random Fields</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/25558273" target="_blank" rel="noopener">条件随机场介绍（译）Introduction to Conditional Random Fields</a></p>
+</li>
+<li><p><a href="http://x-algo.cn/index.php/2016/02/15/conditional-random-field-crf-theory-and-implementation/" target="_blank" rel="noopener">条件随机场（CRF）理论及应用-大数据算法</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/29989121" target="_blank" rel="noopener">条件随机场CRF</a></p>
+</li>
+</ul>
+<h1 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h1><ul>
+<li><p><a href="https://www.google.com/search?q=%E4%BD%BF%E7%94%A8%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB&oq=%E4%BD%BF%E7%94%A8%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB&aqs=chrome..69i57&sourceid=chrome&ie=UTF-8" target="_blank" rel="noopener">使用逻辑回归和随机森林有什么区别 - Google 搜索</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/35814495" target="_blank" rel="noopener">面试了10家公司，以下是一份机器学习面试内容总结</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

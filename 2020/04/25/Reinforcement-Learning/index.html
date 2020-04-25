@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Reinforcement Learning | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Reinforcement Learning"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:26:11.000Z"><a href="/2020/04/25/Reinforcement-Learning/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title">Reinforcement Learning</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Markov-Decision-Processes-MDP"><a href="#Markov-Decision-Processes-MDP" class="headerlink" title="Markov Decision Processes (MDP)"></a>Markov Decision Processes (MDP)</h1><ul>
+<li><p>马尔科夫决策过程是强化学习的理论基础。不管我们是将强化学习应用于五子棋游戏、星际争霸还是机器人行走，我们都假设背后存在了一个马尔科夫决策过程。只不过有的时候我们知道马尔科夫决策过程所有信息(状态集合，动作集合，转移概率和奖励)，有的时候我们只知道部分信息(状态集合和动作集合)，还有些时候马尔科夫决策过程的信息太大无法全部存储 (比如围棋的状态集合总数为 319×19 )。强化学习算法按照上述不同情况可以分为两种: 基于模型 (Model-based) 和非基于模型 (Model-free)。基于模型的强化学习算法是知道并可以存储所有马尔科夫决策过程信息，非基于模型的强化学习算法则需要自己探索未知的马尔科夫过程。[3]</p>
+</li>
+<li><p><code>Reinforcement Learning</code> 与 其他的 <code>Machine Learning</code> 的区别 <a href="https://zhuanlan.zhihu.com/p/30317123" target="_blank" rel="noopener"> 马尔科夫决策过程(Markov Decision Processes)</a></p>
+<a id="more"></a>
+
+<ul>
+<li><p><strong>非监督的</strong>：我们通常只得到 reward signal。每次系统的 action 只能得到代表这次行为的好坏的标量，比如是 10 points，但是我们不知道他的最好的值是多少。</p>
+</li>
+<li><p><strong>延迟性</strong>：得到的结果很可能延迟于我们做出决策一段时间，有些糟糕的影响并不完全因为当前的决策错误导致的，可能由于前面某一个步骤造成了一个不可逆的错误。</p>
+</li>
+<li><p>每个样本 <strong>非独立同分布</strong> 的：我们得到的决策过程，我们获取的每一次信息都不是独立同分布(i.i.d) 的，他是一个有先后顺序的序列，我们并不是简单的将一堆的训练集放进去就行了。</p>
+</li>
+<li><p><strong>action 对之后的结果能够产生影响</strong>：每一次的 action 都会对 environment 产生影响，从而导致下一次得到完全不同的输入样本。比如，作为一个机器人，这个步骤我们继续前进和向左转，将导致我们接下来收集到完全不一样的数据。</p>
+</li>
+</ul>
+</li>
+<li><p>在 <code>MDP</code> 中，<code>immediate reward R</code> <strong>不是</strong> 只取决于 $ s $ ，而是取决于 $ s $ 和 $ a $ ；在 <code>MRP</code> 中，<code>immediate reward R</code> 只取决于 $ s $ 。</p>
+</li>
+<li><p>强化学习的目标：找到能够使得累积回报的期望最大的最优策略 $ \pi $ 。</p>
+</li>
+<li><p><code>state value function</code> 是指在某个状态下，综合考虑所有可能的 action 后，得到的期望 reward；<code>action value function</code> 是指在某个状态下，首先采取 action ，然后遵循策略 $ \pi $ 得到的期望 reward。</p>
+<p>$$<br>\begin{align<em>}<br>v(s) &amp;= \sum \pi (a|s) \cdot q_{\pi} (s,a) \<br>\end{align</em>}<br>$$</p>
+<p>$$<br>\begin{align<em>}<br>q_{\pi}(s,a) &amp;= \sum P_{ss’}^{a} \cdot [ R_{ss’}^{a} + v_{\pi} (s’) ] \<br>\end{align</em>}<br>$$</p>
+</li>
+</ul>
+<ul>
+<li>可以认为给定的某个状态 $ s $ 的 <code>action value function</code> 的期望就是 <code>state value function</code>。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p><a href="https://zhuanlan.zhihu.com/p/25498081" target="_blank" rel="noopener">强化学习入门 第一讲 MDP</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/21292697" target="_blank" rel="noopener">DQN 从入门到放弃2 增强学习与MDP</a></p>
+</li>
+<li><p><a href="https://www.google.com.hk/search?newwindow=1&safe=strict&hl=zh-CN&ei=fDpYW7uYHoSX8wWuj7eADA&q=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+MDP+%E7%9F%A5%E4%B9%8E&oq=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+MDP+%E7%9F%A5%E4%B9%8E&gs_l=psy-ab.3...18574.20050.0.20280.7.7.0.0.0.0.342.342.3-1.1.0....0...1.1j4.64.psy-ab..6.1.342...0i30k1.0.G33WnNKa-E8" target="_blank" rel="noopener">强化学习 MDP 知乎 - Google 搜索</a></p>
+</li>
+</ul>
+<p>*<a href="https://chenrudan.github.io/blog/2016/06/12/reinforcementlearninglesssion2.html" target="_blank" rel="noopener">【David Silver强化学习公开课之二】马尔可夫决策过程MDP</a></p>
+<p>*<a href="http://www.cnblogs.com/jinxulin/p/3517377.html" target="_blank" rel="noopener">增强学习（二）—– 马尔可夫决策过程MDP</a></p>
+<p>*<a href="http://www.algorithmdog.com/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B" target="_blank" rel="noopener">强化学习系列之一:马尔科夫决策过程 | AlgorithmDog</a></p>
+<h1 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h1><h2 id="Basis"><a href="#Basis" class="headerlink" title="Basis"></a>Basis</h2><p>*<code>DP</code> 主要解决的是 <code>Planning</code> 的问题。</p>
+<p>*<code>MDP</code> 需要解决的问题有两种：</p>
+<ul>
+<li><p>Prediction</p>
+<p>  已知 <code>MDP</code> 的 $ S,A,P,R,\gamma $ 以及 policy，目标是算出在每个状态下收敛的的 <code>value function</code>，即处于每个状态下能够获得的期望 reward 是多少。</p>
+<p>  方法：<code>Iterative Policy Evaluation</code> (针对问题不断迭代计算 <code>Bellman Expectation Equation</code> )。</p>
+</li>
+<li><p>Control</p>
+<p>  已知 <code>MDP</code> 的 $ S,A,P,R,\gamma $，但是 policy <strong>未知</strong>，因此它的目标不仅是计算出最优的收敛的 <code>value function</code> ，而且要给出最优的 Policy。</p>
+<p>  方法：<code>Policy Iteration</code>，<code>Value Iteration</code></p>
+</li>
+</ul>
+<h3 id="Iterative-Policy-Evaluation"><a href="#Iterative-Policy-Evaluation" class="headerlink" title="Iterative Policy Evaluation"></a>Iterative Policy Evaluation</h3><p>*Policy Evaluation：基于当前的 Policy 计算出每个状态的 <code>value function</code>。计算方法见上方。</p>
+<p>*计算公式如下：</p>
+<p>  $$<br>  \begin{align<em>}<br>  V_{k+1}(s) &amp;= \sum_{\alpha \in A} \pi(a|s) \cdot q_{\pi}(s,a) \<br>  &amp;= \sum_{\alpha \in A} \pi(a|s) \cdot \left({\cal R}<em>{s}^{a} + \gamma \sum</em>{s’ \in S}{\cal P}<em>{ss’}^{a}V_k(s’)\right) \<br>  &amp;= \sum</em>{\alpha \in A} \pi(a|s) \cdot \sum_{s’, r} {\cal P}(s’,r|s,a) \left( r + \gamma V_k(s’)\right)<br>  \end{align</em>}<br>  $$</p>
+<h3 id="Policy-Improvment"><a href="#Policy-Improvment" class="headerlink" title="Policy Improvment"></a>Policy Improvment</h3><p><em>Policy Improvment：基于当前的 <code>value function</code>，采用 *</em>贪心算法** 来找到当前最优的 Policy。</p>
+<p>*One step look ahead ?</p>
+<h2 id="Policy-Iteration"><a href="#Policy-Iteration" class="headerlink" title="Policy Iteration"></a>Policy Iteration</h2><p>*<code>Policy Iteration</code> 就是在 <code>Iterative Policy Evaluation</code> 的基础上加入一个选择 policy 的过程，即： <code>Policy Iteration</code> = <code>Policy Evaluation</code> + <code>Policy Improvement</code>。</p>
+<h2 id="Value-Iteration"><a href="#Value-Iteration" class="headerlink" title="Value Iteration"></a>Value Iteration</h2><p>*另外，<code>Value Iteration</code> 虽然在迭代的过程中没有显式计算出 policy，但是在得到最优的 value function 之后就能推导出最优的 policy，因此也能用做解决 <code>control</code> 问题。</p>
+<p><em><code>Value Iteration</code> 把 *</em>求和<strong>（求新的 state value 的时候，把所有可能的 action 的得到的 action value 加起来）换成了 **取max</strong>（求新的 state value 的时候，从所有可能的 action 的得到的 action value 中取 max），可以看两个的算法描述。（这点类似 <code>HMM</code> 中的 <code>前向算法</code> 和 <code>维特比算法</code> 的区别）。</p>
+<h2 id="Policy-Iteration-vs-Value-Iteration"><a href="#Policy-Iteration-vs-Value-Iteration" class="headerlink" title="Policy Iteration vs Value Iteration"></a>Policy Iteration vs Value Iteration</h2><p>*相同</p>
+<ul>
+<li>两者计算的都是 <code>state value</code>： $ v(s), \forall s \in S $ 。</li>
+</ul>
+<p>*不同</p>
+<ul>
+<li><p><code>Policy Iteration</code> 计算的是给定的状态下的所有可能 action 的 <strong>期望</strong>（所以对不同的 $ q(s,a) $ 求加权和，权重就是此状态下采取这个 action 的概率）。<code>Value Iteration</code> 计算的是给定的状态下的所有可能 action 的 <strong>最大值</strong>。（两者的关系类似 <code>HMM</code> 中的 “前向算法” 和 “维特比算法” 的关系）。</p>
+</li>
+<li><p><code>Value Iteration</code> 在更新 $ v(s) $ 的时候不会用到 policy。</p>
+</li>
+<li><p><code>Policy Iteration</code> 中每得到一个收敛的 $ v(s) $ ，就会通过 <code>one step lookahead</code> 的方法进行一次 <code>Policy Improvement</code> 。<code>Value Iteration</code> 是在得到 <strong>最终</strong> 收敛的 $ v(s) $ 之后，只通过一次 <code>one step lookahead</code> 的方法即可得到最优的 policy。(参考那个 github 的 jupyter notebook)</p>
+</li>
+</ul>
+<p>*参考</p>
+<ul>
+<li></li>
+</ul>
+<h2 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h2><p>*<a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching_files/DP.pdf" target="_blank" rel="noopener">Planning by Dynamic Programming</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/25580624" target="_blank" rel="noopener">强化学习入门 第二讲 基于模型的动态规划方法 - 知乎专栏</a></p>
+<p>*<a href="http://chenrudan.github.io/blog/2016/06/17/reinforcementlearninglesssion3.html" target="_blank" rel="noopener">【David Silver强化学习公开课之三】动态规划解决MDP的Planning问题 | 听见下雨的声音</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/28084955" target="_blank" rel="noopener">《强化学习》第三讲 动态规划寻找最优策略</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/21378532" target="_blank" rel="noopener">DQN 从入门到放弃4 动态规划与Q-Learning</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/35631806" target="_blank" rel="noopener">动态规划寻找最优策略之Policy Iteration(策略估计)</a></p>
+<p>*<a href="http://www.cnblogs.com/jinxulin/p/3526542.html" target="_blank" rel="noopener">增强学习（三）—– MDP的动态规划解法</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/25319023" target="_blank" rel="noopener">强化学习（Reinforcement Learning）知识整理 - 知乎专栏</a></p>
+<p>*<a href="https://www.google.com.hk/search?newwindow=1&safe=strict&q=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&oq=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&gs_l=psy-ab.12...0.0.0.2974.0.0.0.0.0.0.0.0..0.0....0...1..64.psy-ab..0.0.0.lzaKyuNO0I4" target="_blank" rel="noopener">强化学习 动态规划 - Google 搜索</a></p>
+<h1 id="Model-Free-Prediction-Control"><a href="#Model-Free-Prediction-Control" class="headerlink" title="Model-Free Prediction / Control"></a>Model-Free Prediction / Control</h1><p>Prediction 就是计算 <code>state values</code> （也就是 $ V(s) $ )。</p>
+<p>Control 就是计算 <code>action values (the values of state-action pairs)</code> （也就是 $ Q(s,a) $ )。</p>
+<h2 id="1-蒙特卡洛方法"><a href="#1-蒙特卡洛方法" class="headerlink" title="1. 蒙特卡洛方法"></a>1. 蒙特卡洛方法</h2><h3 id="1-1-Prediction"><a href="#1-1-Prediction" class="headerlink" title="1.1 Prediction"></a>1.1 Prediction</h3><p>*蒙特卡罗方法是利用经验平均来估计值函数。无模型的方法充分评估策略值函数的前提是每个状态都能被访问到。因此，在蒙特卡洛方法中必须采用一定的方法保证每个状态都能被访问到。其中一种方法是探索性初始化。</p>
+<p>*无偏估计，方差大</p>
+<p>*第一次访问蒙特卡罗方法</p>
+<p>  $$<br>  v(s) = \frac{G_{11}(s) + G_{21}(s) + \cdots } {N(s)}<br>  $$</p>
+<p>*每次访问蒙特卡罗方法</p>
+<p>  $$<br>  v(s) = \frac{G_{11}(s) + G_{12}(s) + \cdots + G_{21}(s) + \cdots } {N(s)}<br>  $$</p>
+<p>*递增的计算经验平均的方法：</p>
+<p>  $$<br>  \begin{align<em>}<br>  v_{k}(s) &amp; = \frac{1}{k} \sum_{i=1}^{k} G_i(s) = \frac{1}{k} \left(G_{k}(s) + \sum_{i=1}^{k-1} G_i(s) \right) \<br>  &amp; = \frac{1}{k} \left(G_k(s) + (k-1) v_{k-1}(s) \right) \<br>  &amp; = v_{k-1}(s) + \frac{1}{k} \left(G_k(s) - v_{k-1}(s) \right)<br>  \end{align</em>}<br>  $$</p>
+<h3 id="1-2-Control"><a href="#1-2-Control" class="headerlink" title="1.2 Control"></a>1.2 Control</h3><p>*<code>On-Policy Monte-Carlo</code> 由 <code>policy evaluation + ϵ−Greedy Policy Improvement</code> 组成。</p>
+<h3 id="1-3-参考"><a href="#1-3-参考" class="headerlink" title="1.3 参考"></a>1.3 参考</h3><p>*<a href="https://zhuanlan.zhihu.com/p/25743759" target="_blank" rel="noopener">强化学习入门 第三讲 蒙特卡罗方法 - 知乎专栏</a></p>
+<p>*<a href="https://chenrudan.github.io/blog/2016/07/11/reinforcementlearninglesssion4.html" target="_blank" rel="noopener">【David Silver强化学习公开课之四】Model-Free Learning(解决未知Environment下的Prediction问题) | 听见下雨的声音</a></p>
+<p>*<a href="https://chenrudan.github.io/blog/2016/07/26/reinforcementlearninglesssion5.html" target="_blank" rel="noopener">【David Silver强化学习公开课之五】Model-Free Control(解决未知Environment下的Control问题) | 听见下雨的声音</a></p>
+<p>*<a href="http://www.algorithmdog.com/reinforcement-learning-model-free-evalution" target="_blank" rel="noopener">强化学习系列之三:模型无关的策略评价 | AlgorithmDog</a></p>
+<p>*<a href="https://www.google.com.hk/search?newwindow=1&safe=strict&biw=1301&bih=639&q=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B&oq=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B&gs_l=psy-ab.12...0.0.0.7385.0.0.0.0.0.0.0.0..0.0....0...1..64.psy-ab..0.0.0.pwJM08SqcRQ" target="_blank" rel="noopener">强化学习 蒙特卡洛 - Google 搜索</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/37926601" target="_blank" rel="noopener">详解蒙特卡洛方法：这些数学你搞懂了吗？</a></p>
+<p>*<a href="https://nicercode.github.io/guides/mcmc/" target="_blank" rel="noopener">Markov Chain Monte Carlo - Nice R Code</a></p>
+<h2 id="2-时间差分方法"><a href="#2-时间差分方法" class="headerlink" title="2. 时间差分方法"></a>2. 时间差分方法</h2><h3 id="2-1-Related-concept"><a href="#2-1-Related-concept" class="headerlink" title="2.1 Related concept"></a>2.1 Related concept</h3><p>相比于动态规划的方法，蒙特卡罗的方法需要等到每次试验结束，所以学习速度慢，学习效率不高。从两者的比较我们很自然地会想，能不能借鉴动态规划中 boot’strapping 的方法，在不等到试验结束时就估计当前的值函数呢？于是就出现了时间差分法。</p>
+<p><code>TD</code> 算法的 value function 更新公式。</p>
+<p>$$<br>V(S_t) = V(S_t)+\alpha(R_{t+1}+\gamma V(S_{t+1})-V(S_t))<br>$$</p>
+<p>其中 $ R_{t+1}+\gamma V(S_{t+1}) $ 称为 <code>TD target</code>， $ \delta_t = R_{t+1}+\gamma V(S_{t+1})-V(S_t) $ 称为 <code>TD error</code> 。</p>
+<h3 id="2-1-SARSA"><a href="#2-1-SARSA" class="headerlink" title="2.1 SARSA"></a>2.1 SARSA</h3><p>*On policy TD Control</p>
+<h3 id="2-2-Q-Learning"><a href="#2-2-Q-Learning" class="headerlink" title="2.2 Q-Learning"></a>2.2 Q-Learning</h3><p>*Off policy TD Control</p>
+<p>*参考</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/21421729" target="_blank" rel="noopener">DQN从入门到放弃5 深度解读DQN算法</a></li>
+</ul>
+<h3 id="2-3-参考"><a href="#2-3-参考" class="headerlink" title="2.3 参考"></a>2.3 参考</h3><p>*<a href="https://zhuanlan.zhihu.com/p/25913410" target="_blank" rel="noopener">强化学习入门 第四讲 时间差分法（TD方法）</a></p>
+<p>*<a href="http://blog.csdn.net/coffee_cream/article/details/70194456" target="_blank" rel="noopener">Temporal-Difference （TD） Learning</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/28133594" target="_blank" rel="noopener">强化学习实践四 Agent类和SARSA算法实现</a></p>
+<p>*<a href="https://www.google.com.hk/search?newwindow=1&safe=strict&biw=1301&bih=639&q=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E6%97%B6%E9%97%B4%E5%B7%AE%E5%88%86&oq=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+%E6%97%B6%E9%97%B4%E5%B7%AE%E5%88%86&gs_l=psy-ab.3...83699.114159.0.116927.77.38.27.0.0.0.503.4976.2-7j4j3j1.15.0....0...1.1.64.psy-ab..41.6.862...0j0i12k1.VQjMDTL8m6M" target="_blank" rel="noopener">强化学习 时间差分 - Google 搜索</a></p>
+<h2 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h2><p>*<a href="https://zhuanlan.zhihu.com/p/26828801" target="_blank" rel="noopener">一条咸鱼的强化学习之路4之无模型预测(MC &amp; TD)</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/28107168" target="_blank" rel="noopener">《强化学习》第四讲 不基于模型的预测</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/28108498" target="_blank" rel="noopener">《强化学习》第五讲 不基于模型的控制</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/32161274" target="_blank" rel="noopener">理解强化学习知识之解决无模型的MDP</a></p>
+<h1 id="Value-Function-Approximation"><a href="#Value-Function-Approximation" class="headerlink" title="Value Function Approximation"></a>Value Function Approximation</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><p>基于动态规划的方法，基于蒙特卡罗的方法和基于时间差分的方法。这些方法有一个基本的前提条件，那就是状态空间和动作空间是离散的，而且状态空间和动作空间不能太大。</p>
+<p>注意，这时的值函数其实是一个表格。对于状态值函数，其索引是状态；对于行为值函数，其索引是状态-行为对。值函数迭代更新的过程实际上就是对这张表进行迭代更新。因此，之前讲的强化学习算法又称为表格型强化学习。</p>
+<p>若状态空间的维数很大，或者状态空间为连续空间，此时值函数无法用一张表格来表示。这时，我们需要利用函数逼近的方法对值函数进行表示。</p>
+<p>*传统的表格方法的弊端</p>
+<ul>
+<li><p>状态空间非常大的时候</p>
+</li>
+<li><p>状态空间为连续空间的时候</p>
+</li>
+</ul>
+<p><code>MC</code> 中，target 是 $ G_t $ ； <code>TD(0)</code> 中，target 是 $ R_t+\gamma V’(S_{t+1},w) $ ； <code>TD(λ)</code> 中，target 是  $ G_t^\lambda $ 。</p>
+<p>而且因为它的 target 值也不是 $ v_{\pi}(S_t) $ 的无偏估计，因此 <code>TD(0)</code> 方法的梯度下降版本中也就不能保证收敛。</p>
+<h2 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h2><p>*<a href="https://zhuanlan.zhihu.com/p/26052182" target="_blank" rel="noopener">深度强化学习系列 第一讲 DQN</a></p>
+<h2 id="参考-3"><a href="#参考-3" class="headerlink" title="参考"></a>参考</h2><p>*<a href="https://zhuanlan.zhihu.com/p/26007538" target="_blank" rel="noopener">强化学习入门 第五讲 值函数逼近 - 知乎专栏</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/28223841" target="_blank" rel="noopener">《强化学习》第六讲 价值函数的近似表示 - 知乎专栏</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/32204924" target="_blank" rel="noopener">理解强化学习知识之值函数逼近思想及DQN</a></p>
+<p>*<a href="https://chenrudan.github.io/blog/2016/07/29/reinforcementlearninglesssion6.html" target="_blank" rel="noopener">【David Silver强化学习公开课之六】求解近似值函数 | 听见下雨的声音</a></p>
+<p>*<a href="https://www.google.com.hk/search?newwindow=1&safe=strict&biw=1301&bih=639&q=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+Value+Function+Approximation&oq=%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0+Value+Function+Approximation&gs_l=psy-ab.12...4786.49952.0.50301.25.13.12.0.0.0.769.3043.2-3j3j1j0j1.8.0....0...1.1j2.64.psy-ab..8.12.1149...0j0i12k1.Zn9xtAIFedQ" target="_blank" rel="noopener">强化学习 Value Function Approximation - Google 搜索</a></p>
+<h1 id="Policy-Gradient"><a href="#Policy-Gradient" class="headerlink" title="Policy Gradient"></a>Policy Gradient</h1><h2 id="REINFORCE"><a href="#REINFORCE" class="headerlink" title="REINFORCE"></a>REINFORCE</h2><p>*</p>
+<h3 id="SCST"><a href="#SCST" class="headerlink" title="SCST"></a>SCST</h3><p>*cd</p>
+<p>  在 time step t ，生成了一个 vocabulary size 大小的向量，向量中的每个元素表示每个 word 是 target 输出的概率，这里就把这个概率当做是 take action 的概率。<code>tf.multinomial</code> 就会根据这个概率进行采样，概率越大，越容易被采样到。</p>
+<p>  这样就把 <code>每个时刻 word 的生成</code> 转换成了 <code>每个时刻的 take action</code>，就可以当做是 RL 来做了。</p>
+<p>  在每个时刻，根据概率的大小，来决定下一个时刻生成的单词（也就是：根据概率的大小，来决定下一个时刻 take 哪个 action，概率越大，对应的那个 action 就越容易被 take。因为policy 的定义就是：在某个状态下采取 action 的概率）。</p>
+<p>  更新模型的参数，就会改变每个时刻、生成某个 word 的概率（也就是改变采取某个 action 的概率），这就是直接对 policy 进行建模，也就是 <code>Policy Gradient</code>。</p>
+<p>  这时候 reward 的作用是：根据reward，手动的改变梯度的 <strong>大小</strong> 和 <strong>方向</strong>（作用类似 ground truth）。reward 大就增加它的梯度（改变梯度方向，使得 take 这个 action 的概率变大），否则就降低它的梯度（改变梯度方向，使得 take 这个 action 的概率变小）。</p>
+<p>*从中也可以看出，在每一个 time step 采取 action 后，并不知道这个 action 的好坏，而是在最后通过计算 BLEU 之后才知道（BLEU 越高，这次采取的 <code>action 序列</code> 越好，但是并不能说某一个单独的 action 好）。</p>
+<h2 id="VFA-vs-PG"><a href="#VFA-vs-PG" class="headerlink" title="VFA vs PG"></a>VFA vs PG</h2><h3 id="相同点："><a href="#相同点：" class="headerlink" title="相同点："></a>相同点：</h3><p>*都可以通过神经网络来进行建模。</p>
+<h3 id="不同点："><a href="#不同点：" class="headerlink" title="不同点："></a>不同点：</h3><p>*<code>VFA</code> 是回归问题，target 就是 reward（<code>MC</code> 中是，<code>TD</code> 中是 <code>TD-target</code>。）</p>
+<p>*<code>PG</code> 是分类问题，只不过这里最看重的是最终输出的概率（传统的分类问题中，输出概率后，要计算 argmax，这里不用）。也就是说：输出的概率就是 take 各个 action 的概率，</p>
+<p>  这时候 reward 的作用是：根据reward，手动的改变梯度的 <strong>大小</strong> 和 <strong>方向</strong>（作用类似 ground truth）。reward 大就增加它的梯度（改变梯度方向，使得 take 这个 action 的概率变大），否则就降低它的梯度（改变梯度方向，使得 take 这个 action 的概率变小）。</p>
+<h2 id="参考-4"><a href="#参考-4" class="headerlink" title="参考"></a>参考</h2><p>*<a href="https://karpathy.github.io/2016/05/31/rl/" target="_blank" rel="noopener">Deep Reinforcement Learning: Pong from Pixels</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/26174099" target="_blank" rel="noopener">强化学习进阶 第六讲 策略梯度方法 - 知乎专栏</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/26308073" target="_blank" rel="noopener">强化学习进阶 第七讲 TRPO</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/26441204" target="_blank" rel="noopener">强化学习进阶 第八讲 确定性策略方法</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/21725498" target="_blank" rel="noopener">深度增强学习之Policy Gradient方法1</a></p>
+<p>*<a href="https://zhuanlan.zhihu.com/p/42055115" target="_blank" rel="noopener">浅谈Policy Gradient</a></p>
+<p>*<a href="https://chenrudan.github.io/blog/2016/08/03/reinforcementlearninglesssion7.html" target="_blank" rel="noopener">【David Silver强化学习公开课之七】Policy Gradient | 听见下雨的声音</a></p>
+<p>*<a href="https://www.google.com.hk/search?newwindow=1&safe=strict&source=hp&q=policy+gradient&oq=policy+gr&gs_l=psy-ab.3.0.0l4.1497.6357.0.8000.14.9.4.0.0.0.322.1132.2-3j1.4.0....0...1.1.64.psy-ab..6.8.1140.0..0i131k1j0i12k1.vcgf7NAbQGI" target="_blank" rel="noopener">policy gradient - Google 搜索</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>*Blog</p>
+<ul>
+<li><p><a href="https://zhuanlan.zhihu.com/sharerl" target="_blank" rel="noopener">强化学习知识大讲堂 - 知乎专栏</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/reinforce" target="_blank" rel="noopener">David Silver强化学习公开课中文讲解及实践</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/26884917?group_id=916790785580769280" target="_blank" rel="noopener">无痛的机器学习第二季目录</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/people/yzhihao/posts?page=2" target="_blank" rel="noopener">Evan - 知乎</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/20885568" target="_blank" rel="noopener">Deep Reinforcement Learning 深度增强学习资源 (持续更新）</a></p>
+</li>
+<li><p><a href="http://www.wildml.com/2016/10/learning-reinforcement-learning/" target="_blank" rel="noopener">Learning Reinforcement Learning (with Code, Exercises and Solutions) – WildML</a></p>
+</li>
+<li><p><a href="https://hollygrimm.com/syllabus_rl" target="_blank" rel="noopener">OpenAI Scholars 2018 Reinforcement Learning Syllabus</a></p>
+</li>
+<li><p><a href="http://rll.berkeley.edu/deeprlcourse/" target="_blank" rel="noopener">CS 294 Deep Reinforcement Learning, Fall 2017</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/c_125238795" target="_blank" rel="noopener">CS 294 深度强化学习中文笔记</a></p>
+</li>
+<li><p><a href="http://rail.eecs.berkeley.edu/deeprlcourse/" target="_blank" rel="noopener">CS 294-112</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/codekitty" target="_blank" rel="noopener">喵神大人的深度工坊</a></p>
+</li>
+<li><p><a href="http://web.stanford.edu/class/cs234/schedule.html" target="_blank" rel="noopener">CS234: Reinforcement Learning</a></p>
+</li>
+<li><p><a href="http://icml.cc/2016/tutorials/deep_rl_tutorial.pdf" target="_blank" rel="noopener">Tutorial: Deep Reinforcement Learning</a></p>
+</li>
+<li><p><a href="http://www.meltycriss.com/2017/09/09/note-reinforcement-learning/" target="_blank" rel="noopener">课程笔记《UCL强化学习》</a></p>
+</li>
+<li><p><a href="https://mp.weixin.qq.com/s/7hLIohCB9WthSHF2jsOYdw" target="_blank" rel="noopener">南京大学俞扬博士独家演讲：强化学习前沿（上）</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/41585705" target="_blank" rel="noopener">强化学习基础篇：（已完结）</a></p>
+</li>
+</ul>
+<ul>
+<li><p>Github</p>
+<ul>
+<li><p><a href="https://github.com/dennybritz/reinforcement-learning" target="_blank" rel="noopener">reinforcement-learning</a></p>
+</li>
+<li><p><a href="https://github.com/yandexdataschool/Practical_RL" target="_blank" rel="noopener">Practical_RL</a></p>
+</li>
+<li><p><a href="https://github.com/carpedm20/deep-rl-tensorflow" target="_blank" rel="noopener">deep-rl-tensorflow</a></p>
+</li>
+<li><p><a href="https://github.com/vmayoral/basic_reinforcement_learning" target="_blank" rel="noopener">basic_reinforcement_learning</a></p>
+</li>
+<li><p><a href="https://github.com/kengz/openai_lab" target="_blank" rel="noopener">openai_lab</a></p>
+</li>
+<li><p><a href="https://github.com/ShangtongZhang/reinforcement-learning-an-introduction" target="_blank" rel="noopener">reinforcement-learning-an-introduction</a></p>
+</li>
+<li><p><a href="https://github.com/devsisters/DQN-tensorflow" target="_blank" rel="noopener">DQN-tensorflow</a></p>
+</li>
+<li><p><a href="https://github.com/aikorea/awesome-rl" target="_blank" rel="noopener">awesome-rl</a></p>
+</li>
+<li><p><a href="https://github.com/higgsfield/RL-Adventure" target="_blank" rel="noopener">RL-Adventure</a></p>
+</li>
+<li><p><a href="https://github.com/higgsfield/RL-Adventure-2" target="_blank" rel="noopener">RL-Adventure-2</a></p>
+</li>
+<li><p><a href="https://github.com/JamesChuanggg/pytorch-REINFORCE" target="_blank" rel="noopener">pytorch-REINFORCE</a></p>
+</li>
+<li><p><a href="https://github.com/williamFalcon/DeepRLHacks" target="_blank" rel="noopener">DeepRLHacks</a></p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Notes/">Notes</a>, <a href="/tags/RL/">RL</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

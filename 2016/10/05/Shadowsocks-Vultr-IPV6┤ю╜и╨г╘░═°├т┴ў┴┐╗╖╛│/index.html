@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Shadowsocks,Vultr,IPV6搭建校园网免流量环境 | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Shadowsocks,Vultr,IPV6搭建校园网免流量环境"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-05T04:45:07.000Z"><a href="/2016/10/05/Shadowsocks-Vultr-IPV6┤ю╜и╨г╘░═°├т┴ў┴┐╗╖╛│/">2016-10-05</a></time>
+      
+      
+  
+    <h1 class="title">Shadowsocks,Vultr,IPV6搭建校园网免流量环境</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="胡说八道"><a href="#胡说八道" class="headerlink" title="胡说八道"></a>胡说八道</h2><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>由于校园网不够用且资费太贵，看到可以通过<code>IPv6</code>实现免流量上网，所以决定试一下。</p>
+<p>其实大可不必那么麻烦（有其它的更方便的方式实现翻墙+免流量，而且免费），只是感觉作为一个程序员还是需要弄一个<code>VPS</code>玩玩的，否则出去说都没弄过<code>VPS</code>多可笑，嗯，弄一下，长长见识。</p>
+<h3 id="ShadowSocks"><a href="#ShadowSocks" class="headerlink" title="ShadowSocks"></a>ShadowSocks</h3><a id="more"></a>
+<p><code>ShadowSocks</code>是一个安全的<code>socks5</code>代理，它通过客户端以指定的密码、加密方式和端口连接服务器，成功连接到服务器后，客户端在用户的电脑上构建一个本地<code>socks5</code>代理。使用时将流量分到本地<code>socks5</code>代理，客户端将自动加密并转发流量到服务器，服务器以同样的加密方式将流量回传给客户端，以此实现代理上网。</p>
+<h3 id="VPS"><a href="#VPS" class="headerlink" title="VPS"></a>VPS</h3><p>不多说了，防和&amp;*%￥#谐。</p>
+<h2 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h2><p>这里假设你已经购买并部署好了<code>VPS</code>（如果要通过<code>IPv6</code>实现免流量上网，你的<code>VPS</code>需要有<code>IPv6</code>地址），可以接着往下看。</p>
+<p><font color="red">注意：</font>这里<code>OS</code>是<code>CentOS 6 x64</code>，以下操作也是在这个环境下进行的。</p>
+<h3 id="初始设置"><a href="#初始设置" class="headerlink" title="初始设置"></a>初始设置</h3><p>如果第一次登陆，输入下面命令更改密码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> passwd</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 输入新密码两次</span></span><br></pre></td></tr></table></figure>
+
+<p>安装各种配置工具：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 一些安装包需要的编译工具</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install gcc</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install libevent</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install python-devel</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装python的pip包管理</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install python-setuptools &amp;&amp; easy_install pip</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> pip install gevent</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装加密工具</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install openssl-devel</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> yum install swig</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> pip install M2Crypto</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装shadowsocks服务器端</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> pip install shadowsocks</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h3><p>自定义配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用vi新建shadowsocks.json配置文件</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/shadowsocks.json</span></span><br></pre></td></tr></table></figure>
+
+<p>直接输入<code>:set paste</code>, 然后输入<code>i</code>进入<code>Paste insert</code>状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 粘贴下列数据到配置文件中</span></span><br><span class="line">&#123;</span><br><span class="line">    "server":"::",</span><br><span class="line">    "server_port":9999,</span><br><span class="line">    "local_port":1080,</span><br><span class="line">    "password":"password",</span><br><span class="line">    "timeout":300,</span><br><span class="line">    "method":"aes-256-cfb"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>&quot;server&quot;</code>一栏之所以填<code>&quot;::&quot;</code>是为了同时监听<code>IPv4/v6</code>两个端口，因为本文的需求中我们需要双栈连接，如果<code>VPS</code>没有<code>IPv6</code>功能或仅是为了搭梯子用，这里面填写一个<code>IPv4</code>的地址就可以了。<code>&quot;password&quot;</code>栏填写自己要设置的密码。至于<code>&quot;method&quot;</code>加密方式一栏，主流的有<code>rc4-md5</code>和<code>aes-256-cfb</code>等等，据说前者速度快，后者更安全，可以根据个人喜好自行权衡。</p>
+<p>如果有多个用户需要使用而不想都使用一套端口和密码，可以如下写成多端口配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 粘贴下列数据到配置文件中</span></span><br><span class="line">&#123;</span><br><span class="line">    "server":"::",</span><br><span class="line">    "port_password":</span><br><span class="line">    &#123;</span><br><span class="line">        "8388":"pwd",</span><br><span class="line">        "8389":"pwd",</span><br><span class="line">        "8340":"pwd"</span><br><span class="line">    &#125;,</span><br><span class="line">    "local_port":1080,</span><br><span class="line">    "timeout":300,</span><br><span class="line">    "method":"aes-256-cfb"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><p><strong><font color="red">注意：</font></strong></p>
+<ol>
+<li>必须关闭<code>IPv4</code>和<code>IPv6</code>的防火墙，它俩的防火墙是独立的所以都要关闭，否则客户端连接不上的。网上的教程都没说，捣鼓了半天看了别人的评论才想到的防火墙也要关闭。</li>
+</ol>
+<blockquote>
+<p>Redhat使用了SELinux来增强安全，关闭的办法为：</p>
+<ol>
+<li>永久有效<br>修改 <code>/etc/selinux/config</code> 文件中的 <code>SELINUX=&quot;&quot;</code> 为 <code>disabled</code>，然后重启。</li>
+<li>即时生效<br><code>setenforce 0</code></li>
+</ol>
+<p>关闭防火墙的方法为：</p>
+<ol>
+<li>永久性生效<br>开启：<code>chkconfig iptables on</code><br>关闭：<code>chkconfig iptables off</code></li>
+<li>即时生效，重启后失效<br>开启：<code>service iptables start</code><br>关闭：<code>service iptables stop</code></li>
+</ol>
+<p>需要说明的是对于 Linux 下的其它服务都可以用以上命令执行开启和关闭操作</p>
+<p>补充：<br>a. 防火墙还需要关闭ipv6的防火墙：<br><code>chkconfig ip6tables off</code><br>并且可以通过如下命令查看状态：<br><code>chkconfig --list iptables</code><br>b. selinux状态可以通过以下命令查看：<br><code>sestatus</code></p>
+</blockquote>
+<p>保存配置文件后就可以通过以下命令启动和停止<code>ShadowSocks</code>服务了：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> start</span></span><br><span class="line">ssserver -c /etc/shadowsocks.json -d start</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> stop</span></span><br><span class="line">ssserver -d stop</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>参考其它博客内容即可。如果提示端口冲突，可以把本地端口改成其它的，然后重启即可。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>主要参考前两篇文献</p>
+<ul>
+<li><a href="http://andrewliu.in/2015/08/29/Vultr-VPS-%E9%85%8D%E7%BD%AEShadowsocks/" target="_blank" rel="noopener">Vultr VPS 配置Shadowsocks</a></li>
+<li><a href="https://www.shintaku.cc/2015/11/11/shadowsocks/" target="_blank" rel="noopener">VPS搭建ShadowSocks服务</a></li>
+<li><a href="https://questionyu.com/free-by-ipv6.html" target="_blank" rel="noopener">校园网免流量上网<del>优酷土豆爱奇艺无压力</del></a></li>
+<li><a href="http://zlcoder.me/2016/03/27/proxifier-shadowsocks-ipv6-dai-li/" target="_blank" rel="noopener">Proxifier &amp; Shadowsocks IPv6 代理</a></li>
+<li><a href="http://yooooh.net/2015/10/10/ipv6-shadowsocks/" target="_blank" rel="noopener">教育网ipv6+shadowsocks的搭建与优化</a></li>
+<li><a href="http://www.voidcn.com/blog/xtdao/article/p-4276373.html" target="_blank" rel="noopener">shadowsocks+ipv6免流量上网（三）——shadowsocks本地客户端使用</a></li>
+<li><a href="https://blog.phpgao.com/shadowsocks_on_linux.html" target="_blank" rel="noopener">使用shadowsocks轻松搭建翻墙环境教程 - 老高的技术博客</a></li>
+<li><a href="https://blog.kuoruan.com/48.html" target="_blank" rel="noopener">搬瓦工(Bandwagonhost)搭建Shadowsocks并优化速度</a></li>
+<li><a href="https://blog.kuoruan.com/102.html" target="_blank" rel="noopener">小内存福音，Kcptun Shadowsocks加速方案 | 扩软博客</a></li>
+<li><a href="https://www.polarxiong.com/archives/%E6%90%AD%E5%BB%BAipv6-VPN-%E8%AE%A9ipv4%E4%B8%8Aipv6-%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6%E6%8F%90%E5%8D%87%E5%88%B0100M.html" target="_blank" rel="noopener">使用shadowsocks，搭建ipv6 VPN，让ipv4上ipv6，下载速度提升到100M</a></li>
+<li><a href="http://jinke.me/2015/12/20/shadowshocks.html" target="_blank" rel="noopener">VPS + Shadowsocks 同时监听 IPv4 和 IPv6</a></li>
+<li><a href="http://mawenjian.net/p/1281.html" target="_blank" rel="noopener">Linux系统下使用SoftEther VPN Server搭建VPN服务器</a></li>
+<li><a href="https://wiki.mforever78.com/Server/transparent-proxy-configuration-on-ipv6.html" target="_blank" rel="noopener">校园网 IPv6 环境下的透明代理配置</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Tools/">Tools</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/IPv6/">IPv6</a>, <a href="/tags/Shadowsocks/">Shadowsocks</a>, <a href="/tags/VPS/">VPS</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

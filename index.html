@@ -1,0 +1,622 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:31:17.000Z"><a href="/2020/04/25/NOTES/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/NOTES/">NOTES</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="基于生成对抗网络的网页显著度图预测"><a href="#基于生成对抗网络的网页显著度图预测" class="headerlink" title="基于生成对抗网络的网页显著度图预测"></a>基于生成对抗网络的网页显著度图预测</h3><ul>
+<li><p>使用 GAN(生成对抗网络)生成给定网页的显著度图，从而预测网页的哪些区域更会受到用户的关注。</p>
+</li>
+<li><p>把网页快照和显著度图当作不同域别的图像，并使用 GAN 进行转换。设计多种不同结构的网络模型，加入自注意力机制与谱归一化，引入网页特征用于指导显著度图的生成，同时试用多种损失函数，并使用 TTUR 的方式对网络进行训练。</p>
+</li>
+<li><p>使用的网络结构：</p>
+<ul>
+<li><p>resnet</p>
+</li>
+<li><p>u-net</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/NOTES/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:28:28.000Z"><a href="/2020/04/25/Summaries-of-GAN/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Summaries-of-GAN/">Summaries of GAN</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Cross-Domain"><a href="#Cross-Domain" class="headerlink" title="Cross Domain"></a>Cross Domain</h2><ul>
+<li><p>Image-to-Image Translation</p>
+<ul>
+<li><p>Supervised</p>
+<ul>
+<li>Pix2pix<ul>
+<li><a href="https://github.com/yenchenlin/pix2pix-tensorflow/blob/master/model.py#L91" target="_blank" rel="noopener">tf.nn.sigmoid_cross_entropy_with_logits</a>，没有经过 sigmoid 处理。</li>
+<li><a href="https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py#L453" target="_blank" rel="noopener">-tf.log(predict_real + EPS)</a> ，predict_real 经过 sigmoid 处理。</li>
+<li><a href="https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/models/networks.py#L176" target="_blank" rel="noopener">nn.BCELoss</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Unsupervised</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Summaries-of-GAN/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:28:26.000Z"><a href="/2020/04/25/NLP/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/NLP/">NLP</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Skip-gram-Naive-Softmax"><a href="#Skip-gram-Naive-Softmax" class="headerlink" title="Skip-gram-Naive-Softmax"></a>Skip-gram-Naive-Softmax</h2><ul>
+<li><p>one-hot 缺陷</p>
+<ul>
+<li><p>维度爆炸</p>
+</li>
+<li><p>不能表达语义关系：计算机，电脑</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h2><ul>
+<li>分为 <code>CBOW</code> 与 <code>Skip-gram</code>，两种都是 predictive 的模型。</li>
+</ul>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/NLP/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:26:11.000Z"><a href="/2020/04/25/Reinforcement-Learning/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Reinforcement-Learning/">Reinforcement Learning</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Markov-Decision-Processes-MDP"><a href="#Markov-Decision-Processes-MDP" class="headerlink" title="Markov Decision Processes (MDP)"></a>Markov Decision Processes (MDP)</h1><ul>
+<li><p>马尔科夫决策过程是强化学习的理论基础。不管我们是将强化学习应用于五子棋游戏、星际争霸还是机器人行走，我们都假设背后存在了一个马尔科夫决策过程。只不过有的时候我们知道马尔科夫决策过程所有信息(状态集合，动作集合，转移概率和奖励)，有的时候我们只知道部分信息(状态集合和动作集合)，还有些时候马尔科夫决策过程的信息太大无法全部存储 (比如围棋的状态集合总数为 319×19 )。强化学习算法按照上述不同情况可以分为两种: 基于模型 (Model-based) 和非基于模型 (Model-free)。基于模型的强化学习算法是知道并可以存储所有马尔科夫决策过程信息，非基于模型的强化学习算法则需要自己探索未知的马尔科夫过程。[3]</p>
+</li>
+<li><p><code>Reinforcement Learning</code> 与 其他的 <code>Machine Learning</code> 的区别 <a href="https://zhuanlan.zhihu.com/p/30317123" target="_blank" rel="noopener"> 马尔科夫决策过程(Markov Decision Processes)</a></p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Reinforcement-Learning/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:24:13.000Z"><a href="/2020/04/25/Machine-Learning/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Machine-Learning/">Machine Learning</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>如果公式无法正常显示，请尝试多刷新几次页面。</p>
+<h1 id="Unsupervised"><a href="#Unsupervised" class="headerlink" title="Unsupervised"></a>Unsupervised</h1><h2 id="Clustering"><a href="#Clustering" class="headerlink" title="Clustering"></a>Clustering</h2><h3 id="K-Means"><a href="#K-Means" class="headerlink" title="K-Means"></a>K-Means</h3><ul>
+<li><p>算法复杂度不易控制 $ O(KNm) $ 。</p>
+</li>
+<li><p><code>K-Means</code> 时候出现的超级大群现象，如何解决?</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Machine-Learning/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:13:23.000Z"><a href="/2020/04/25/Normalization-in-DL/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Normalization-in-DL/">Normalization in DL</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h2><p>注意：<code>归一化</code> 与 <code>标准化</code> 不是同一个概念。</p>
+<ul>
+<li><p>为什么要进行归一化？</p>
+<ul>
+<li>去除不同特征之间由于单位不同导致的差别（比如身高用m，体重用kg）。</li>
+</ul>
+</li>
+<li><p>归一化的作用</p>
+<ul>
+<li><p>加快梯度下降算法的收敛。（归一化之后损失函数的等高线由椭圆变成了圆，梯度直接朝向最小点移动）</p>
+<p>如果不进行归一化，由于特征向量中不同特征的取值相差较大，会导致目标函数变“扁”。这样在进行梯度下降的时候，梯度的方向就会偏离最小值的方向，增大训练时间。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Normalization-in-DL/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:04:00.000Z"><a href="/2020/04/25/Initialization-in-DL/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Initialization-in-DL/">Initialization in DL</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Category"><a href="#Category" class="headerlink" title="Category"></a>Category</h2><h3 id="Lecun"><a href="#Lecun" class="headerlink" title="Lecun"></a>Lecun</h3><ul>
+<li><p>Uniform</p>
+<p>It draws samples from a uniform distribution within [-limit, limit] where limit is <code>limit = sqrt(3. / fan_in)</code>。</p>
+<p><code>fan_in</code>: the number of input units in the weight tensor。</p>
+<p>Tensorflow中的函数：</p>
+<ul>
+<li><p><a href="https://www.tensorflow.org/api_docs/python/tf/keras/initializers/lecun_uniform" target="_blank" rel="noopener">tf.initializers.lecun_uniform</a></p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Initialization-in-DL/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T05:44:32.000Z"><a href="/2020/04/25/Optimization-Method-in-DL/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/04/25/Optimization-Method-in-DL/">Optimization Method in DL</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h1><p>$$<br>\theta_{t+1,i} = \theta_{t,i} - \eta·g_{t,i}<br>$$</p>
+<ul>
+<li><p>缺点：</p>
+<ul>
+<li><p>SGD 最大的缺点是下降速度慢。</p>
+</li>
+<li><p>可能会在沟壑（“盆地”）的两边持续震荡，停留在一个局部最优点，可能无法从中出来，也就无法继续优化。（所以需要细心的初始化参数）。</p>
+</li>
+<li><p>遇到“鞍点/平原”，可能停止更新（梯度都是 $ 0 $）。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/04/25/Optimization-Method-in-DL/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-05-19T05:28:36.000Z"><a href="/2017/05/19/Striving-for-Simplicity-The-All-Convolutional-Net/">2017-05-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/05/19/Striving-for-Simplicity-The-All-Convolutional-Net/">Striving for Simplicity: The All Convolutional Net</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <ul>
+<li><p>contribution</p>
+<ul>
+<li><p><code>stride convoulution</code>替代<code>pooling</code>，实现没有<code>pooling</code>的 network</p>
+</li>
+<li><p><code>guided backpropagation</code>，可视化的新方法，可以在没有</p>
+</li>
+</ul>
+</li>
+<li><p>有2种方法去掉<code>pooling</code>，并且不影响网络的性能:</p>
+<ul>
+<li><p>增大它前面一层的<code>convolution</code>层的stride，目的是起到类似<code>pooling</code>的降维作用。</p>
+<ul>
+<li>这种做法有问题：虽然起到了降维的作用，但是相对于<code>pooling</code>，相当于只考虑了top-left的features，实验结果证实效果确实不好。</li>
+</ul>
+</li>
+<li><p>把这一层的<code>pooling</code>换成简单的<code>convolution</code>，但要保证：（1）相同大小的 filter size 和 stride；（2）和<code>pooling</code>相同大小的输出。</p>
+<ul>
+<li><p>这种没有前一种的问题，但是增加了 parameters 的数量。</p>
+</li>
+<li><p>作者说这可以看成是主动的学习<code>pooling</code>，而不是固定的采用<code>max/avg</code>等方式。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/05/19/Striving-for-Simplicity-The-All-Convolutional-Net/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-04-21T16:24:46.000Z"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">2017-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这篇文章最主要的<strong>目的</strong>是把<code>GAN</code>作为一种<code>representation learning</code>的方法（对<code>Generator</code>和<code>Discriminator</code>都是这个目的，而不是生成图片），然后用学到的 features 用于<code>supervised learning</code>（<code>classification</code>等）。做了相关的实验验证（用学到的 features 在其它数据集上进行分类，对学到的<code>features</code>进行可视化）<code>representation learning</code>的效果很好。</p>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ul>
+<li><p>无标数据比有标数据多得多，如果能利用这些数据提取 features，然后用于<code>supervised</code>任务，会很有帮助</p>
+</li>
+<li><p>用于<code>supervised learning</code>的<code>CNN</code>在<code>CV</code>方面取得了取得了很好的成绩，如果用于<code>unsupervised learning</code>是不是也可以取得比较不错的成绩。</p>
+</li>
+<li><p>最近的<code>GAN</code>很火，那是不是可以把<code>GAN</code>的结构用到<code>CNN</code>中（所以从这个角度看是：用<code>GAN</code>改进<code>CNN</code>，而不是用<code>CNN</code>改进<code>GAN</code>），把<code>CNN</code>改成一种可以用于<code>unsupervised learning</code>任务的结构。</p>
+</li>
+<li><p>convincing evidence 表明：提出的 model 可以 learns a hierarchy of representations from object parts to scenes </p>
+</li>
+</ul>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+  
+    <a href="/page/2/" class="alignright next">Next</a>
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Normalization in DL | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Normalization in DL"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-04-25T08:13:23.000Z"><a href="/2020/04/25/Normalization-in-DL/">2020-04-25</a></time>
+      
+      
+  
+    <h1 class="title">Normalization in DL</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h2><p>注意：<code>归一化</code> 与 <code>标准化</code> 不是同一个概念。</p>
+<ul>
+<li><p>为什么要进行归一化？</p>
+<ul>
+<li>去除不同特征之间由于单位不同导致的差别（比如身高用m，体重用kg）。</li>
+</ul>
+</li>
+<li><p>归一化的作用</p>
+<ul>
+<li><p>加快梯度下降算法的收敛。（归一化之后损失函数的等高线由椭圆变成了圆，梯度直接朝向最小点移动）</p>
+<p>如果不进行归一化，由于特征向量中不同特征的取值相差较大，会导致目标函数变“扁”。这样在进行梯度下降的时候，梯度的方向就会偏离最小值的方向，增大训练时间。</p>
+<a id="more"></a>
+
+<center>
+<img src="https://www.tuchuang001.com/images/2018/07/29/20171027225501116.jpg" alt="归一化之前" border="0" />
+</center>
+
+<p>如果进行归一化以后，目标函数会呈现比较“圆”，这样训练速度大大加快。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2018/07/29/43c33fb1801c3d35f94b06bd2bfd277c_hd.png" alt="归一化之后" border="0" />
+</center>
+</li>
+<li><p>归一化有可能提高精度 (如 <code>KNN</code>)。</p>
+</li>
+</ul>
+</li>
+<li><p>归一化的方法</p>
+<ul>
+<li><p>min-max</p>
+</li>
+<li><p>z score</p>
+</li>
+</ul>
+</li>
+<li><p>应用场景说明</p>
+<ul>
+<li><p>概率模型不需要归一化，因为这种模型不关心变量的取值，而是关心变量的分布和变量之间的条件概率。</p>
+</li>
+<li><p>SVM、线性回归之类的最优化问题需要归一化，是否归一化主要在于是否关心变量取值。</p>
+</li>
+<li><p>神经网络需要标准化处理，一般变量的取值在 $ -1 $ 到 $ 1 $ 之间，这样做是为了弱化某些变量的值较大而对模型产生影响。一般神经网络中的隐藏层采用tanh激活函数比sigmod激活函数要好些，因为tanh双曲正切函数的取值 $ [-1,1] $ 之间，均值为 $ 0 $ 。</p>
+</li>
+<li><p>在 K 近邻算法中，如果不对解释变量进行标准化，那么具有小数量级的解释变量的影响就会微乎其微。</p>
+</li>
+</ul>
+</li>
+<li><p>参考</p>
+<ul>
+<li><p><a href="https://www.zhihu.com/question/20455227/answer/197897298" target="_blank" rel="noopener">特征工程中的「归一化」有什么作用？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/37129350/answer/482926509" target="_blank" rel="noopener">为什么 feature scaling 会使 gradient descent 的收敛更好? - 知乎</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h2><ul>
+<li><p>传统的归一化方法：白化。但是有不足：</p>
+<ul>
+<li><p>计算量非常大（第一步进行 <code>PCA</code>）。</p>
+</li>
+<li><p>不是处处可微的，所以不能在神经网络中使用。</p>
+</li>
+<li><p>这种单纯的归一化可能会破坏掉某一层网络学到的特征。</p>
+<p>这些原因导致无法用到 <code>DNN</code> 中。</p>
+</li>
+</ul>
+</li>
+<li><p>Batch Normalization：即在每次 <code>SGD</code> 时，通过 mini-batch 来对相应的 activation 做规范化操作，使得输出信号各个维度的均值为 $ 0 $ ，方差为 $ 1 $ 。而最后的 <code>scale and shift</code> 操作则是为了让因训练所需而“刻意”加入的 <code>BN</code> 能够有可能还原最初的输入（即当），从而保证整个 network 的 capacity。（有关 capacity 的解释：实际上 <code>BN</code> 可以看作是在原模型上加入的“新操作”，这个新操作很大可能会改变某层原来的输入。当然也可能不改变，不改变的时候就是“还原原来输入”。如此一来，既可以改变同时也可以保持原输入，那么模型的容纳能力（capacity）就提升了。）</p>
+</li>
+<li><p><code>BN</code> 相当于弄了一个可以 <strong>学习</strong> 的归一化层，这种“学习”体现在：如果网络认为不需要对这一层的输出做归一化，可以通过 $ \beta $，$ \gamma $ 来控制归一化后的结果和原始的输出相近似。</p>
+</li>
+<li><p>$ \beta $，$ \gamma $ 起到了 <strong>de-normalization</strong> 的作用。如果不用 $ \beta $，$ \gamma $ 的话，就只是单纯的做了归一化，此时网络无法把归一化的特征转化回去（这层学到的、一化之前的特征），此时就已经不是 <code>BN</code> 了。</p>
+</li>
+<li><p><code>BN</code> 本质上解决的是反向传播过程中的梯度问题。</p>
+<p>  把得到的特征进行 “零均值， $ 1 $ 方差”，相当于把数据压缩到了原点为中心，此时对于 <code>sigmoid/tanh</code> ，梯度是比较大的时候。</p>
+</li>
+<li><p><code>BN</code> 有一种理解是每个 batch 的均值和方差由于 shuffle 都会改变，所以可以理解做了一种数据增强。<a href="https://www.zhihu.com/question/68730628/answer/266828177" target="_blank" rel="noopener">参考1</a>，<a href="https://www.zhihu.com/question/68730628/answer/266733274" target="_blank" rel="noopener">参考2</a></p>
+</li>
+<li><p><code>BN</code> 放在激活函数的前面还是后面，没有一个确定的答案。（原论文中提到放到激活函数的前面，<code>ResNet</code> 的改进版本也是放到了激活函数的前面。）</p>
+</li>
+<li><p><code>BN</code> 存在的问题：</p>
+<ul>
+<li><p><code>BN</code> 的优势在 <code>batch size &gt; 32/64</code> 的时候才会凸显出来。</p>
+</li>
+<li><p><code>BN</code> 在 image to image translation 中，必须不能区分 train 和 test 阶段，否则效果很差。</p>
+<ul>
+<li><code>BN</code> 在 classification 当中的效果较好，主要原因是因为 classification 对于 scale 不敏感。但是 superresolution 这样图片到图片的变换，per image 的 scale 还是一个有效信息。</li>
+</ul>
+</li>
+<li><p><code>BN</code>无法用到 <code>RNN</code> 中</p>
+<ul>
+<li><p>因为本质上 <code>BN</code> 是对每个 <code>神经元/卷积核</code> 单独做 normalization，应用到 <code>RNN</code> 的环境中，就是在每个 time step 都需要进行 <code>BN</code>，这就会浪费很大的计算资源和存储资源。使得网络更为复杂，更难训练。所以导致无法用到 <code>RNN</code> 中。（并不是不能用到 <code>RNN</code> 中，而是用了之后效果可能不好。参考：<a href="https://blog.csdn.net/malefactor/article/details/51549771" target="_blank" rel="noopener">CNN和RNN中如何引入BatchNorm - CSDN博客</a>)</p>
+</li>
+<li><p>在每次迭代中引进了随机性，使梯度增加了 noise，这一点使得 <code>BN</code> 对于 generative model(例如 lstm 网络)或者 reinforcement learning(例如 DQN )都是不适用的。</p>
+</li>
+</ul>
+</li>
+<li><p>Batch Normalization 基于一个mini batch的数据计算均值和方差，而不是基于整个Training set来做，相当于进行梯度计算式引入噪声。因此，Batch Normalization不适用于对噪声敏感的强化学习、生成模型（Generative model：GAN，VAE）使用。相反，Weight Normalization对通过标量g和向量v对权重W进行重写，重写向量v是固定的，因此，基于Weight Normalization的Normalization可以看做比Batch Normalization引入更少的噪声。<a href="https://zhuanlan.zhihu.com/p/26990912" target="_blank" rel="noopener">&lt;深度学习优化策略-3&gt; 深度学习网络加速器Weight Normalization_WN</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="https://www.zhihu.com/question/38102762" target="_blank" rel="noopener">深度学习中 Batch Normalization为什么效果好？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/62599196" target="_blank" rel="noopener">NTIRE2017夺冠的EDSR去掉了Batch Normalization层就获得了提高为什么？ - 知乎</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/34879333" target="_blank" rel="noopener">Batch Normalization原理与实战</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/33173246" target="_blank" rel="noopener">详解深度学习中的Normalization，不只是BN</a></p>
+</li>
+</ul>
+<h2 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h2><ul>
+<li><p>同一层的所有神经元（卷积核）得到的 feature map 进行归一化。</p>
+</li>
+<li><p><code>BN</code> 是对同一个神经元（卷积核）在不同的样本得到的 feature map 进行归一化。</p>
+</li>
+<li><p>这里一层网络共享一个均值和方差，不同训练样本对应不同的均值和方差，这是和 <code>BN</code> 的最大区别。<a href="https://blog.csdn.net/zhangjunhit/article/details/53169308" target="_blank" rel="noopener">参考1</a></p>
+</li>
+<li><p><code>LN</code> 针对单个训练样本进行，不依赖于其他数据，因此可以避免 <code>BN</code> 中受 mini-batch 数据分布影响的问题，可以用于小 mini-batch 场景、动态网络场景和 <code>RNN</code> ，特别是自然语言处理领域。此外，<code>LN</code> 不需要保存 mini-batch 的均值和方差，节省了额外的存储空间。</p>
+</li>
+<li><p>但是，<code>BN</code> 的转换是针对单个神经元可训练的——不同神经元的输入经过再平移和再缩放后分布在不同的区间，而 <code>LN</code> 对于一整层的神经元训练得到同一个转换——所有的输入都在同一个区间范围内。如果不同输入特征不属于相似的类别（比如颜色和大小），那么 <code>LN</code> 的处理可能会降低模型的表达能力。<a href="https://zhuanlan.zhihu.com/p/33173246" target="_blank" rel="noopener">参考1</a></p>
+</li>
+</ul>
+<h2 id="Instance-Normalization"><a href="#Instance-Normalization" class="headerlink" title="Instance Normalization"></a>Instance Normalization</h2><ul>
+<li><p>在 <code>image-to-image translation</code>（Super resolution，Style transfer）、<code>GAN</code> 等任务中，<code>BN</code> 的效果并不好（比如：<code>CycleGAN</code>，<code>DualGAN</code>中使用的 <code>BN</code> 没有区分训练和测试阶段）。使用 <code>BN</code> 的时候，如果测试阶段设置 <code>is_training=False</code>，生成的图片是噪点，设置成<code>is_training=True</code>，可以得到和 <code>IN</code> 相近的效果。</p>
+</li>
+<li><p><code>IN</code> 可以理解成为每个图片自己做 <code>BN</code>，这样比 <code>BN</code> 能保留更多scale信息。更新的研究表明如果训练收敛不是问题的话，进一步去掉 <code>IN</code> 的效果也会更好。<a href="https://www.zhihu.com/question/62599196" target="_blank" rel="noopener">参考</a></p>
+</li>
+</ul>
+<h3 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="https://www.zhihu.com/question/62599196" target="_blank" rel="noopener">NTIRE2017夺冠的EDSR去掉了Batch Normalization层就获得了提高为什么？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/68730628" target="_blank" rel="noopener">Batch normalization和Instance normalization的对比？ - 知乎</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/68730628" target="_blank" rel="noopener">Batch normalization和Instance normalization的对比？ - 知乎</a></p>
+</li>
+</ul>
+<h2 id="对比：BN-vs-LN-vs-IN"><a href="#对比：BN-vs-LN-vs-IN" class="headerlink" title="对比：BN vs LN vs IN"></a>对比：BN vs LN vs IN</h2><p><img src="https://www.tuchuang001.com/images/2018/04/26/v2-fad3333df9a87c1c4f1db4b20557da6f_r.jpg" alt="BN vs LN vs IN.jpg"></p>
+<ul>
+<li><p>上图的 <code>C</code> 可以看成是某一层中神经元的数目（对于 <code>FC</code> ）或卷积核的数目（对于 <code>CNN</code>）。</p>
+</li>
+<li><p>一开始z轴方向的 <code>H，W</code> 看不懂什么意思，其实这里可以理解为 <code>H*W</code>。这种设计很合理：对于 <code>FC</code>，垂直于 <code>C</code> 的一个纵列可以看做是某个神经元的输出向量；对于 <code>CNN</code>，垂直于 <code>C</code> 的一个纵列可以看成把某一个 <code>feature map</code> 拉伸后得到的一个向量。</p>
+</li>
+<li><p><code>Batch Normalization</code> 是对某一个隐藏层中的 <strong>每一个</strong> 神经元/卷积核的输出（即垂直于 <code>C</code> 的每一列）<strong>单独</strong>（即不同神经元/卷积核的输出之间不会有关联，这里是相对于 <code>LN</code> 所说的）做 <code>cross sample</code> 的normalization。</p>
+</li>
+<li><p><code>Layer Normalization</code> 是对某一个隐藏层中的 <strong>所有</strong> 神经元/卷积核的输出（即垂直于 <code>C</code> 的每一列）<strong>一起</strong> 做。</p>
+</li>
+<li><p><code>Instance Normalization</code> 是对某一个隐藏层中的 <strong>每一个</strong> 神经元/卷积核的输出（即垂直于 <code>C</code> 的每一列）<strong>单独</strong>（即不同神经元/卷积核的输出之间不会有关联，这里是相对于 <code>LN</code> 所说的）做 normalization。（这里和 <code>Batch Normalization</code> 最像，相当于去掉了 <code>cross sample</code>的 <code>BN</code>）</p>
+</li>
+</ul>
+<h2 id="Conditional-Batch-Normalization"><a href="#Conditional-Batch-Normalization" class="headerlink" title="Conditional Batch Normalization"></a>Conditional Batch Normalization</h2><ul>
+<li><p>相对于 <code>BN</code>，这里的 <code>mean</code> 和 <code>variance</code> 不再是通过计算训练数据集得到，而是采用类似于 word embedding 的方式训练一个 lookup table，然后查表得到<code>mean</code>和<code>variance</code>。</p>
+</li>
+<li><p>实验效果比传统的 <code>Conditional GAN</code> 的效果好（传统的方法：把 condition 信息和 <code>Generator/Discriminator</code> 的 <code>feature map</code> 进行concat）。</p>
+</li>
+<li><p><code>Conditional GAN</code> 更好的方法：<a href="https://openreview.net/forum?id=ByS1VpgRZ" target="_blank" rel="noopener">cGANs with Projection Discriminator</a> (<code>Generator</code>用的是<code>Conditional Batch Normalization</code>来引入 condition 信息，没有使用 concat)。</p>
+</li>
+</ul>
+<h2 id="Batch-Re-normalization"><a href="#Batch-Re-normalization" class="headerlink" title="Batch Re-normalization"></a>Batch Re-normalization</h2><ul>
+<li><a href="https://www.zhihu.com/question/55890057" target="_blank" rel="noopener">如何评价batch renormalization？ - 知乎</a></li>
+</ul>
+<h2 id="Weight-Normalization"><a href="#Weight-Normalization" class="headerlink" title="Weight Normalization"></a>Weight Normalization</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/26990912" target="_blank" rel="noopener">&lt;深度学习优化策略-3&gt; 深度学习网络加速器Weight Normalization_WN</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Deep-Learning/">Deep Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Normalization/">Normalization</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>

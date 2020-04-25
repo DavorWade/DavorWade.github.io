@@ -1,0 +1,413 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="google-site-verification" content="6-Grm86DHfS67XSHMuvfO8cIcQcOWPpjGvOBMxbA3Fo" />
+  <meta charset="utf-8">
+  
+  <title>Chapter 8 Optimization for Training Deep Models | WatsonYang&#39;s Blog</title>
+  <meta name="author" content="Watson Yang">
+  
+  <meta name="description" content="My secret private space.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Chapter 8 Optimization for Training Deep Models"/>
+  <meta property="og:site_name" content="WatsonYang&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="WatsonYang&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+  
+  <a href="https://github.com/watsonyanghx" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub">
+  </a>
+  <script src="https://use.fontawesome.com/4eb261e456.js"></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">WatsonYang&#39;s Blog</a></h1>
+  <h2><a href="/">Enrich yourself.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+
+    <li> <a href="/atom.xml">RSS</a> </li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2017-02-25T15:01:24.000Z"><a href="/2017/02/25/Chapter-8-Optimization-for-Training-Deep-Models/">2017-02-25</a></time>
+      
+      
+  
+    <h1 class="title">Chapter 8 Optimization for Training Deep Models</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>非常抱歉，这一张基本上没怎么看，只是大致的浏览了一下。</p>
+<p>原因是，这章基本上都是理论的介绍，感觉对做工程的可能没有太大帮助（如果你是研究这个的phD，而且你对这方面也不是很了解，还是很建议你好好读一下的），另外<code>Neural Networks</code>的 optimization 本身就像是个黑盒子。</p>
+<p>这一部分感觉目前对我的帮助真的不大，打算是等到以后遇到相关问题后再回来复习吧。</p>
+<p>This chapter focuses on <strong>one particular case of optimization</strong>: finding the parameters θ of a neural network that significantly <strong>reduce a cost function J(θ)</strong>, which typically includes a performance measure evaluated on the <strong>entire training set</strong> as well as <strong>additional regularization terms</strong>。</p>
+<h1 id="8-1-How-Learning-Differs-from-Pure-Optimization"><a href="#8-1-How-Learning-Differs-from-Pure-Optimization" class="headerlink" title="8.1 How Learning Differs from Pure Optimization"></a>8.1 How Learning Differs from Pure Optimization</h1><p>前面有个小节就是关于<code>optimization</code>的，在那里也说了：<code>ML</code>只是利用 <code>optimization</code> 的方法来进行训练，它的终极目标是<code>test error</code>尽可能的小；而 <code>optimization</code> 是希望完全的拟合数据。</p>
+<a id="more"></a>
+
+<ul>
+<li><p><strong>Machine learning</strong> usually acts indirectly，reduce a different cost function J(θ) in the hope that doing so will improve P；<strong>pure optimization</strong>, where minimizing J is a goal in and of itself </p>
+</li>
+<li><p>Cost function of <strong>Machine learning</strong> is an average over the <strong>training data</strong>，<strong>pure optimization</strong> 通常是单独的对<strong>每一个</strong> training example 都进行 optimization。</p>
+</li>
+<li><p><strong>pure optimization</strong> 不会遇到 local minimum，因为它的目的是完全的拟合每一个 training example。</p>
+</li>
+</ul>
+<h2 id="8-1-1-Empirical-Risk-Minimization"><a href="#8-1-1-Empirical-Risk-Minimization" class="headerlink" title="8.1.1 Empirical Risk Minimization"></a>8.1.1 Empirical Risk Minimization</h2><ul>
+<li><font color='red'>太笨了，没看懂 -_-</font> </li>
+</ul>
+<h2 id="8-1-2-Surrogate-Loss-Functions-and-Early-Stopping"><a href="#8-1-2-Surrogate-Loss-Functions-and-Early-Stopping" class="headerlink" title="8.1.2 Surrogate Loss Functions and Early Stopping"></a>8.1.2 Surrogate Loss Functions and Early Stopping</h2><ul>
+<li><p>这一部分主要讲要选择好的<code>loss function</code>，当一个<code>loss function</code>不好训练的时候，可以考虑改变成等价的容易训练的形式，比如：用<code>MSE</code>不好训练，就改为<code>log-likelyhood</code>、<code>cross entropy</code>。</p>
+</li>
+<li><p>实际说的就是把<code>loss function</code>换成等价的另外一种形式，这里的<strong>等价</strong>不是简单的改变形式，而是可以从概率或其它方面给出<strong>相同的解释</strong>。</p>
+</li>
+<li><p>For example, the negative log-likelihood of the correct class is typically used as a surrogate for the 0-1 loss. </p>
+</li>
+<li><p>另外，这里再次讲了一下<code>early stopping</code>，与之前不同的是这里主要对比与 optimization 的不同：<code>DL</code>的训练如果用了<code>early stopping</code>，就会发现停止训练的时候，<code>loss function</code>的梯度值往往还很大；而这时正是 optimization 最“喜欢”的时候，是绝对不可能停止 optimization 的。</p>
+</li>
+</ul>
+<h2 id="8-1-3-Batch-and-Minibatch-Algorithms"><a href="#8-1-3-Batch-and-Minibatch-Algorithms" class="headerlink" title="8.1.3 Batch and Minibatch Algorithms"></a>8.1.3 Batch and Minibatch Algorithms</h2><ul>
+<li><p><code>Batch</code>与<code>Minibatch</code>的定义是不一样的，可以看 278 页的讲解。-_-</p>
+</li>
+<li><p><code>Minibatch stochastic gradient descent</code>的讲解在<code>CS231n</code>的课程中讲解的很好，对它的解释也很好，可以参考那个视频。</p>
+<p><strong>主要思想</strong>就是可以很好的粗略的代表整体数据集的 distribution，所以能够加快<code>object function</code>的收敛速度，起到加快训练的速度。</p>
+<p>另外，这里强调了在取得时候一定要记得 minibatches be <strong>selected randomly</strong>，<strong>目的</strong>是尽量的降低取得的 minibatche 中的数据之间的耦合度，防止网络持续看到某种局部分布，导致无法学习到整体的数据分布。</p>
+<p><strong>做法</strong>就是每次在整个数据集上迭代之后都对数据集 shuffle 一次。不过如果数据集过大，也可以只 shuffle 一次，不过这样只有在都一个 epoch 的时候，是 unbiased，第二次就会 biased，不过这种训练带来的好处可以 overcome 因为 biased 而导致的 overfitting。</p>
+<p>总之，在训练之前对数据 shuffle，是非常重要的。即使只是 shuffle 一次，也会有很大的意义。</p>
+</li>
+<li><p>如果数据量非常非常大，可能导致在训练的时候，不会用整个数据集进行训练（每个 training example 都只使用到了一次），这个时候<code>overfitting</code>不再是问题，而<code>underfitting</code>就成为了潜在的问题。</p>
+</li>
+</ul>
+<h1 id="8-2-Challenges-in-Neural-Network-Optimization"><a href="#8-2-Challenges-in-Neural-Network-Optimization" class="headerlink" title="8.2 Challenges in Neural Network Optimization"></a>8.2 Challenges in Neural Network Optimization</h1><h2 id="8-2-1-Ill-Conditioning"><a href="#8-2-1-Ill-Conditioning" class="headerlink" title="8.2.1 Ill-Conditioning"></a>8.2.1 Ill-Conditioning</h2><ul>
+<li><p><code>Ill-Conditioning</code>一般被认为存在于<code>Neural Networks</code>的训练过程中。病态体现在随机梯度下降会”卡”在某些情况，此时即使很小的更新步长也会增加<code>cost function</code>。</p>
+</li>
+<li><p><font color='red'>解决办法是什么？</font> </p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/56977045" target="_blank" rel="noopener">什么是ill-conditioning 对SGD有什么影响？ - 知乎</a></p>
+</li>
+</ul>
+<h2 id="8-2-2-Local-Minima"><a href="#8-2-2-Local-Minima" class="headerlink" title="8.2.2 Local Minima"></a>8.2.2 Local Minima</h2><ul>
+<li><p>对于凸函数，<code>objective function</code>最终可以收敛到 global minima。</p>
+</li>
+<li><p>但是对于非凸函数，<code>objective function</code>很大可能会收敛到 local minima。，但是实验证明很多情况下 global minima 与 local minima 的差别不大，所以不是<code>Neural Networks</code>训练的主要问题。</p>
+</li>
+<li><p>Local Minima <strong>不是</strong>主要问题的<strong>主要原因</strong>可以分为以下几个：</p>
+<ul>
+<li><p>最重要的当然是上面说的实验证明很多情况下 global minima 与 local minima 的差别不大。</p>
+</li>
+<li><p><code>Neural Networks</code>训练最终想要的是 test error 尽可能的低，并且不管是 global minima 还是 local minima 都是针对 training dataset 说的，如果真的达到了 global minima ，反而成了<code>overfitting</code>，所以不是很重要。</p>
+</li>
+<li><p>当前的一些 optimization 方法能够很好的降低这种现象发生的可能性，如：momentum。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="8-2-3-Plateaus-Saddle-Points-and-Other-Flat-Regions"><a href="#8-2-3-Plateaus-Saddle-Points-and-Other-Flat-Regions" class="headerlink" title="8.2.3 Plateaus, Saddle Points and Other Flat Regions"></a>8.2.3 Plateaus, Saddle Points and Other Flat Regions</h2><ul>
+<li><p>For many <strong>high-dimensional non-convex functions</strong>, local minima (and maxima) are in fact <strong>rare</strong> compared to another kind of point with <strong>zero gradient</strong>: a saddle point.</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/18/QQ20170318111528.png" alt="A saddle point containing both positive and negative curvature." border="0" />
+</center>
+
+
+</li>
+</ul>
+<h2 id="8-2-4-Cliffs-and-Exploding-Gradients"><a href="#8-2-4-Cliffs-and-Exploding-Gradients" class="headerlink" title="8.2.4 Cliffs and Exploding Gradients"></a>8.2.4 Cliffs and Exploding Gradients</h2><ul>
+<li><p>梯度消失和梯度爆炸都不好，都会使得之前的训练工作变得无效，需要重新开始训练。</p>
+</li>
+<li><p>The objective function for highly nonlinear deep neural networks or for recurrent neural networks often contains sharp nonlinearities in parameter space <strong>resulting from the multiplication of several parameters</strong>. These nonlinearities give rise to <strong>very high derivatives</strong> in some places. When the parameters <strong>get close to such a cliff region</strong>, a gradient descent update can <strong>catapult the parameters very far</strong>, possibly <strong>losing most of the optimization work</strong> that had been done.</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/18/QQ20170318114038.png" alt="Cliff region" border="0" />
+</center>
+
+
+</li>
+</ul>
+<h2 id="8-2-5-Long-Term-Dependencies"><a href="#8-2-5-Long-Term-Dependencies" class="headerlink" title="8.2.5 Long-Term Dependencies"></a>8.2.5 Long-Term Dependencies</h2><ul>
+<li><p>就是说的<strong>梯度消失</strong>和<strong>梯度爆炸</strong>的原因：连续乘一个矩阵<code>W</code>，大于 1 就会产生梯度爆炸；小于 1 就会产生梯度消失。</p>
+</li>
+<li><p>在 10.7 节专门讲了<code>RNN</code>中的 Long-Term Dependencies。</p>
+</li>
+</ul>
+<h2 id="8-2-6-Inexact-Gradients"><a href="#8-2-6-Inexact-Gradients" class="headerlink" title="8.2.6 Inexact Gradients"></a>8.2.6 Inexact Gradients</h2><ul>
+<li><p>In other cases, the <strong>objective function</strong> we want to minimize is actually intractable. When the objective function is intractable, typically <strong>its gradient</strong> is intractable as well. In such cases we can only <strong>approximate</strong> the gradient.</p>
+</li>
+<li><p>One can also <strong>avoid the problem</strong> by choosing a <strong>surrogate loss function</strong> that is <strong>easier to approximate</strong> than the true loss</p>
+</li>
+</ul>
+<h2 id="8-2-7-Poor-Correspondence-between-Local-and-Global-Structure"><a href="#8-2-7-Poor-Correspondence-between-Local-and-Global-Structure" class="headerlink" title="8.2.7 Poor Correspondence between Local and Global Structure"></a>8.2.7 Poor Correspondence between Local and Global Structure</h2><ul>
+<li><p>Initialization on the wrong side of mountain causes failure to find globally best solution。</p>
+<center>
+<img src="https://www.tuchuang001.com/images/2017/03/18/QQ20170318115819.png" alt="Optimization based on local downhill moves can fail if the local surface does not point toward the global solution." border="0" />
+</center>
+
+
+</li>
+</ul>
+<h2 id="8-2-8-Theoretical-Limits-of-Optimization"><a href="#8-2-8-Theoretical-Limits-of-Optimization" class="headerlink" title="8.2.8 Theoretical Limits of Optimization"></a>8.2.8 Theoretical Limits of Optimization</h2><ul>
+<li><p><font color='red'>太笨了，没看懂 -_-</font> </p>
+</li>
+<li><p><a href="https://exacity.github.io/deeplearningbook-chinese/Chapter8_optimization_for_training_deep_models/" target="_blank" rel="noopener">深度模型中的优化 – Deep Learning Book Chinese Translation</a></p>
+</li>
+</ul>
+<h1 id="8-3-Basic-Algorithms"><a href="#8-3-Basic-Algorithms" class="headerlink" title="8.3 Basic Algorithms"></a>8.3 Basic Algorithms</h1><ul>
+<li><p>介绍训练的方法：<code>SGD</code>、<code>Momentum</code>与<code>Nesterov Momentum</code></p>
+</li>
+<li><p><a href="https://project.inria.fr/deeplearning/files/2016/05/optimization-training-deep.pdf" target="_blank" rel="noopener">Optimization for Training Deep Models - Deep learning reading group</a></p>
+</li>
+</ul>
+<h1 id="8-4-Parameter-Initialization-Strategies"><a href="#8-4-Parameter-Initialization-Strategies" class="headerlink" title="8.4 Parameter Initialization Strategies"></a>8.4 Parameter Initialization Strategies</h1><ul>
+<li><p>特别蛋疼，讲了那么多方法，突然来了句：上面介绍的方法可能都不会取得很好的效果，然后分析了效果不好的原因。主要是前面介绍的内容挺多的。</p>
+</li>
+<li><p>weight</p>
+<ul>
+<li><p>说了那么多，实际工程中，<code>weight</code>的初始化大多还是<strong>随机</strong>初始化为一个<strong>接近于 0 的比较小</strong>的数。</p>
+</li>
+<li><p>almost always initialize all the weights in the model to values drawn randomly from a Gaussian or uniform distribution. The choice of Gaussian or uniform distribution does not seem to matter very much, but has not been exhaustively studied. </p>
+</li>
+<li><p>The scale of the initial distribution, however, does have a large effect on both the outcome of the optimization procedure and on the ability of the network to generalize.</p>
+</li>
+<li><p>初始化为<strong>比较大</strong>的值：</p>
+<ul>
+<li><p>好处</p>
+<ul>
+<li><p>Larger initial weights will yield <strong>a stronger symmetry breaking effect</strong>, helping to avoid redundant units. </p>
+</li>
+<li><p>They also help to <strong>avoid losing signal</strong> during forward or back-propagation through the linear component of each layer—larger values in the matrix result in larger outputs of matrix multiplication.</p>
+</li>
+</ul>
+</li>
+<li><p>坏处</p>
+<ul>
+<li><p>太大会产生梯度爆炸。</p>
+</li>
+<li><p>太大可能会使得某些<code>activation function</code>陷入 saturate。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>综上，大多时候还是初始化为比较小的值。</p>
+</li>
+<li><p>bias</p>
+<ul>
+<li><p>大都是初始化为 0 （也有说初始化为非常小的接近 0 的值，说这样可以在一开始就起到训练作用）。但是有一些情况初始为非 0 值还是很需要的。可以看书中 305 页相关内容的介绍。</p>
+</li>
+<li><p>For ReLU networks 0.1 may be better for hidden units。</p>
+</li>
+</ul>
+</li>
+<li><p>不论是<code>weight</code>还是<code>bias</code>，初始化都要注意<strong>打破对称性</strong>。</p>
+</li>
+<li><p>除了上面列出的随机初始化还可以使用下面的几种方式：</p>
+<ul>
+<li><p>initialize a supervised model with the parameters learned by an <strong>unsupervised model</strong> trained on the <strong>same inputs</strong>.</p>
+</li>
+<li><p>One can also perform <strong>supervised</strong> training on a <strong>related</strong> task. Even performing <strong>supervised</strong> training on an <strong>unrelated</strong> task can sometimes yield an initialization that offers faster convergence than a random initialization.</p>
+</li>
+</ul>
+</li>
+<li><p>可以参考最后列出的两个 slides 中的相关内容。</p>
+</li>
+</ul>
+<h1 id="8-5-Algorithms-with-Adaptive-Learning-Rates"><a href="#8-5-Algorithms-with-Adaptive-Learning-Rates" class="headerlink" title="8.5 Algorithms with Adaptive Learning Rates"></a>8.5 Algorithms with Adaptive Learning Rates</h1><ul>
+<li><p>讲的主要是几个比较流行的 adaptive learning rates 算法。</p>
+</li>
+<li><p>可以参考最后列出的两个 slides 中的相关内容。</p>
+</li>
+</ul>
+<h1 id="8-6-Approximate-Second-Order-Methods"><a href="#8-6-Approximate-Second-Order-Methods" class="headerlink" title="8.6 Approximate Second-Order Methods"></a>8.6 Approximate Second-Order Methods</h1><ul>
+<li>用二阶方法进行训练的方法，没有看。</li>
+</ul>
+<h1 id="8-7-Optimization-Strategies-and-Meta-Algorithms"><a href="#8-7-Optimization-Strategies-and-Meta-Algorithms" class="headerlink" title="8.7 Optimization Strategies and Meta-Algorithms"></a>8.7 Optimization Strategies and Meta-Algorithms</h1><ul>
+<li>In practice, it is more important to choose a model family that is <strong>easy to optimize</strong> than to use a powerful optimization algorithm. </li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<li><p><a href="https://project.inria.fr/deeplearning/files/2016/05/optimization-training-deep.pdf" target="_blank" rel="noopener">Optimization for Training Deep Models - Deep learning reading group</a></p>
+</li>
+<li><p><a href="https://www.lsv.uni-saarland.de/fileadmin/teaching/psr/ws1617/nnia_chap7.pdf" target="_blank" rel="noopener">Chapter 7: Optimization for Training Deep Models</a></p>
+</li>
+<li><p><a href="https://exacity.github.io/deeplearningbook-chinese/Chapter8_optimization_for_training_deep_models/" target="_blank" rel="noopener">深度模型中的优化 – Deep Learning Book Chinese Translation</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Deep-Learning/">Deep Learning</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:watsonyanghx.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
+  
+    <li><a href="/categories/Deep-Learning/">Deep Learning</a><small>3</small></li>
+  
+    <li><a href="/categories/Interview/">Interview</a><small>1</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>8</small></li>
+  
+    <li><a href="/categories/Deep-Learning/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/NLP/">NLP</a><small>1</small></li>
+  
+    <li><a href="/categories/OJ/">OJ</a><small>48</small></li>
+  
+    <li><a href="/categories/Paper/">Paper</a><small>5</small></li>
+  
+    <li><a href="/categories/Reinforcement-Learning/">Reinforcement Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Technique-Summaries/">Technique Summaries</a><small>2</small></li>
+  
+    <li><a href="/categories/Tools/">Tools</a><small>1</small></li>
+  
+    <li><a href="/categories/WhatEver/">WhatEver</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">Tag Cloud</h3>
+  <div class="entry">
+    <a href="/tags/Algorithm/" style="font-size: 18.18px;">Algorithm</a> <a href="/tags/BFS/" style="font-size: 11.82px;">BFS</a> <a href="/tags/Backtracking/" style="font-size: 12.73px;">Backtracking</a> <a href="/tags/Binary-Tree/" style="font-size: 14.55px;">Binary Tree</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/CNN/" style="font-size: 15.45px;">CNN</a> <a href="/tags/CS231n/" style="font-size: 11.82px;">CS231n</a> <a href="/tags/Combinatorial-number/" style="font-size: 10.91px;">Combinatorial number</a> <a href="/tags/DFS/" style="font-size: 14.55px;">DFS</a> <a href="/tags/DP/" style="font-size: 19.09px;">DP</a> <a href="/tags/Data-structure/" style="font-size: 10.91px;">Data structure</a> <a href="/tags/DeconvNet/" style="font-size: 10px;">DeconvNet</a> <a href="/tags/Deep-Learning/" style="font-size: 17.27px;">Deep Learning</a> <a href="/tags/Disjoint-Set/" style="font-size: 11.82px;">Disjoint Set</a> <a href="/tags/Divide-and-Conquer/" style="font-size: 13.64px;">Divide and Conquer</a> <a href="/tags/GAN/" style="font-size: 10.91px;">GAN</a> <a href="/tags/Graph/" style="font-size: 13.64px;">Graph</a> <a href="/tags/Greedy/" style="font-size: 11.82px;">Greedy</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/HihoCoder/" style="font-size: 16.36px;">HihoCoder</a> <a href="/tags/IPv6/" style="font-size: 10px;">IPv6</a> <a href="/tags/LintCode/" style="font-size: 20px;">LintCode</a> <a href="/tags/Machine-Learning/" style="font-size: 10.91px;">Machine Learning</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Normalization/" style="font-size: 10px;">Normalization</a> <a href="/tags/Notes/" style="font-size: 10px;">Notes</a> <a href="/tags/Numpy/" style="font-size: 10px;">Numpy</a> <a href="/tags/POJ/" style="font-size: 10.91px;">POJ</a> <a href="/tags/Permutation/" style="font-size: 10px;">Permutation</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Queue/" style="font-size: 10.91px;">Queue</a> <a href="/tags/RL/" style="font-size: 10px;">RL</a> <a href="/tags/Recursion/" style="font-size: 12.73px;">Recursion</a> <a href="/tags/ResNet/" style="font-size: 10px;">ResNet</a> <a href="/tags/Shadowsocks/" style="font-size: 10px;">Shadowsocks</a> <a href="/tags/String/" style="font-size: 11.82px;">String</a> <a href="/tags/VPS/" style="font-size: 10px;">VPS</a> <a href="/tags/WhatEver/" style="font-size: 10px;">WhatEver</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 Watson Yang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'light-disqus';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="totop" style="position:fixed;bottom:35px;right:20px;cursor: pointer;">
+  <a title="返回顶部"><i class="fa fa-angle-double-up fa-3x" aria-hidden="true"></i></a>
+</div>
+<script src="/js/totop.js"></script>
+
+</body>
+</html>
