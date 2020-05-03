@@ -81,6 +81,52 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2017-04-21T16:24:46.000Z"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">2017-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这篇文章最主要的<strong>目的</strong>是把<code>GAN</code>作为一种<code>representation learning</code>的方法（对<code>Generator</code>和<code>Discriminator</code>都是这个目的，而不是生成图片），然后用学到的 features 用于<code>supervised learning</code>（<code>classification</code>等）。做了相关的实验验证（用学到的 features 在其它数据集上进行分类，对学到的<code>features</code>进行可视化）<code>representation learning</code>的效果很好。</p>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ul>
+<li><p>无标数据比有标数据多得多，如果能利用这些数据提取 features，然后用于<code>supervised</code>任务，会很有帮助</p>
+</li>
+<li><p>用于<code>supervised learning</code>的<code>CNN</code>在<code>CV</code>方面取得了取得了很好的成绩，如果用于<code>unsupervised learning</code>是不是也可以取得比较不错的成绩。</p>
+</li>
+<li><p>最近的<code>GAN</code>很火，那是不是可以把<code>GAN</code>的结构用到<code>CNN</code>中（所以从这个角度看是：用<code>GAN</code>改进<code>CNN</code>，而不是用<code>CNN</code>改进<code>GAN</code>），把<code>CNN</code>改成一种可以用于<code>unsupervised learning</code>任务的结构。</p>
+</li>
+<li><p>convincing evidence 表明：提出的 model 可以 learns a hierarchy of representations from object parts to scenes </p>
+</li>
+</ul>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2017-04-11T17:18:52.000Z"><a href="/2017/04/12/Longest-Common-Substring/">2017-04-12</a></time>
       
       
@@ -462,47 +508,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2017-02-22T16:40:27.000Z"><a href="/2017/02/23/Chapter-5-Machine-Learning-Basics/">2017-02-23</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2017/02/23/Chapter-5-Machine-Learning-Basics/">Chapter 5 Machine Learning Basics</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="《Deep-Learning》-读书笔记"><a href="#《Deep-Learning》-读书笔记" class="headerlink" title="《Deep Learning》 读书笔记"></a>《Deep Learning》 读书笔记</h1><p>写这个笔记的目的有两个：一是以高层的角度把整个章节的内容联系起来，从而加深自己的理解，同时也可以供日后复习使用；二是在日后的组会中可能会降到的时候，有东西可以讲（好偷懒 -_-）。</p>
-<p>因为是刚入门的新手，有很多东西还不了解，或者了解的不透彻，肯定会有错误和疏漏的地方，希望大家不吝赐教哈～～</p>
-<h1 id="5-1-Learning-Algorithms"><a href="#5-1-Learning-Algorithms" class="headerlink" title="5.1 Learning Algorithms"></a>5.1 Learning Algorithms</h1><p>首先，提出了经典的<code>ML</code>的定义：</p>
-<blockquote>
-<p>A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P , if its performance at tasks in T , as measured by P , improves with experience E.</p>
-</blockquote>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/02/23/Chapter-5-Machine-Learning-Basics/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -527,6 +532,8 @@
   <ul class="entry">
   
     <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/C/">C++</a><small>1</small></li>
   
     <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
   

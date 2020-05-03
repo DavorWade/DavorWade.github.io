@@ -81,6 +81,52 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2020-05-03T03:27:13.000Z"><a href="/2020/05/03/cast-in-C/">2020-05-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/05/03/cast-in-C/">*_cast in C++</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><p><code>static_cast</code> 的主要应用场景为：</p>
+<ul>
+<li>用于基本数据类型之间的转换。但是由于数值范围的不同，需要用户保证转换的安全性。</li>
+<li>用于类指针/引用的上/下行转换。这种转换是在编译期完成的，如果无法完成转换，在编译的时候会报错。</li>
+</ul>
+<p>其中对于类指针/引用的上/下行转换：</p>
+<ul>
+<li>用于上行转换的时候是安全的。</li>
+<li>用于下行转换的时候是不安全的，因为它不会做 run time 的类型检查。</li>
+</ul>
+<p>这里对安全的定义，可以见下面和 <code>dynamic_cast</code> 对比的部分。 </p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/05/03/cast-in-C/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2020-04-25T08:31:17.000Z"><a href="/2020/04/25/NOTES/">2020-04-25</a></time>
       
       
@@ -490,52 +536,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2017-04-21T16:24:46.000Z"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">2017-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>这篇文章最主要的<strong>目的</strong>是把<code>GAN</code>作为一种<code>representation learning</code>的方法（对<code>Generator</code>和<code>Discriminator</code>都是这个目的，而不是生成图片），然后用学到的 features 用于<code>supervised learning</code>（<code>classification</code>等）。做了相关的实验验证（用学到的 features 在其它数据集上进行分类，对学到的<code>features</code>进行可视化）<code>representation learning</code>的效果很好。</p>
-<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ul>
-<li><p>无标数据比有标数据多得多，如果能利用这些数据提取 features，然后用于<code>supervised</code>任务，会很有帮助</p>
-</li>
-<li><p>用于<code>supervised learning</code>的<code>CNN</code>在<code>CV</code>方面取得了取得了很好的成绩，如果用于<code>unsupervised learning</code>是不是也可以取得比较不错的成绩。</p>
-</li>
-<li><p>最近的<code>GAN</code>很火，那是不是可以把<code>GAN</code>的结构用到<code>CNN</code>中（所以从这个角度看是：用<code>GAN</code>改进<code>CNN</code>，而不是用<code>CNN</code>改进<code>GAN</code>），把<code>CNN</code>改成一种可以用于<code>unsupervised learning</code>任务的结构。</p>
-</li>
-<li><p>convincing evidence 表明：提出的 model 可以 learns a hierarchy of representations from object parts to scenes </p>
-</li>
-</ul>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/04/22/Unsupervised-Representation-Learning-with-Deep-Convolutional-Generative-Adversarial-Networks/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -558,6 +558,8 @@
   <ul class="entry">
   
     <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
+  
+    <li><a href="/categories/C/">C++</a><small>1</small></li>
   
     <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
   
