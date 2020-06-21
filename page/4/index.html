@@ -81,6 +81,50 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2017-01-16T06:39:20.000Z"><a href="/2017/01/16/Hidden-Markov-Model/">2017-01-16</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/01/16/Hidden-Markov-Model/">Hidden Markov Model</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这篇只是个人为了加深对<code>Markov Model</code>的理解而做的学习笔记，基本是以易于理解的目的进行组织，所以可能有很多地方不太严禁。如有错误，还请不吝指出。</p>
+<h1 id="Markov-Process"><a href="#Markov-Process" class="headerlink" title="Markov Process"></a>Markov Process</h1><ul>
+<li><p>一个<code>Markov Process</code>是状态间的转移仅依赖于前<code>n</code>个状态的过程。这个过程被称之为<code>n</code>阶马尔科夫模型，其中<code>n</code>是影响下一个状态选择的（前）<code>n</code>个状态。</p>
+<p>最简单的<code>Markov Process</code>是一阶模型，它的状态选择仅与前一个状态有关。</p>
+</li>
+<li><p><code>Markov Process</code>有两个假设：</p>
+<ul>
+<li><p>系统在时刻t的状态只与时刻<code>t-1</code>处的状态相关（也称为无后效性）。</p>
+<p>用如下公式表示：<code>P(qt=Sj|qt-1=Si,qt-2=Sk,…) =  P(qt=Sj|qt-1=Si)</code>，<code>t</code>为大于<code>1</code>的任意数值，<code>Sk</code>为任意状态</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/01/16/Hidden-Markov-Model/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2017-01-15T13:16:03.000Z"><a href="/2017/01/15/Unique-Binary-Search-Trees/">2017-01-15</a></time>
       
       
@@ -465,48 +509,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-02T16:39:00.000Z"><a href="/2016/12/03/Jump-Game/">2016-12-03</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/03/Jump-Game/">Jump Game</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <blockquote>
-<p><a href="https://www.lintcode.com/en/problem/jump-game/" target="_blank" rel="noopener">Jump Game</a></p>
-<p><strong>Description:</strong></p>
-<p>Given an array of non-negative integers, you are initially positioned at the first index of the array. </p>
-<p>Each element in the array represents your maximum jump length at that position. </p>
-<p>Determine if you are able to reach the last index.</p>
-<p><strong>Notice:</strong></p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2016/12/03/Jump-Game/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -532,7 +534,7 @@
   
     <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
   
-    <li><a href="/categories/C/">C++</a><small>5</small></li>
+    <li><a href="/categories/C/">C++</a><small>6</small></li>
   
     <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
   

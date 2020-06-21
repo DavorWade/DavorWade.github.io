@@ -81,6 +81,44 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2020-06-21T02:14:51.000Z"><a href="/2020/06/21/C-Virtual-Table/">2020-06-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2020/06/21/C-Virtual-Table/">C++ Virtual Table</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>为了实现 C++ 的多态，C++ 使用了一种 <code>动态绑定</code> 的技术。实现 <code>动态绑定</code> 的方法有很多种，但是很多编译器都是用了类似的方案：<code>虚表</code>。本文介绍如何通过 <code>虚表</code> 来实现 <code>动态绑定</code>。</p>
+<p>注意：<code>虚表</code> 本身并不是 C++ 的标准，它是编译器实现 <code>动态绑定</code> 的一种方式。</p>
+<h2 id="虚表"><a href="#虚表" class="headerlink" title="虚表"></a>虚表</h2><h3 id="什么是虚表"><a href="#什么是虚表" class="headerlink" title="什么是虚表"></a>什么是虚表</h3><p><code>虚表(Virtual Table)</code> 是一个 <code>指针数组</code>，里面存储的是 <code>函数指针</code>，指向 <code>虚函数</code>。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2020/06/21/C-Virtual-Table/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2020-05-24T09:36:32.000Z"><a href="/2020/05/24/C-Parameter-Pack/">2020-05-24</a></time>
       
       
@@ -97,6 +135,8 @@
 
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://songlee24.github.io/2014/07/22/cpp-changeable-parameter/" target="_blank" rel="noopener">C++学习之可变参数的函数与模板 | 神奕的博客</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/104450480" target="_blank" rel="noopener">C++的可变参数模板 - 知乎</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/language/parameter_pack" target="_blank" rel="noopener">Parameter pack(since C++11) - cppreference.com</a></li>
 </ul>
 
       
@@ -468,46 +508,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2020-04-25T08:24:13.000Z"><a href="/2020/04/25/Machine-Learning/">2020-04-25</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2020/04/25/Machine-Learning/">Machine Learning</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>如果公式无法正常显示，请尝试多刷新几次页面。</p>
-<h1 id="Unsupervised"><a href="#Unsupervised" class="headerlink" title="Unsupervised"></a>Unsupervised</h1><h2 id="Clustering"><a href="#Clustering" class="headerlink" title="Clustering"></a>Clustering</h2><h3 id="K-Means"><a href="#K-Means" class="headerlink" title="K-Means"></a>K-Means</h3><ul>
-<li><p>算法复杂度不易控制 $ O(KNm) $ 。</p>
-</li>
-<li><p><code>K-Means</code> 时候出现的超级大群现象，如何解决?</p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2020/04/25/Machine-Learning/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -531,7 +531,7 @@
   
     <li><a href="/categories/Algorithm/">Algorithm</a><small>2</small></li>
   
-    <li><a href="/categories/C/">C++</a><small>5</small></li>
+    <li><a href="/categories/C/">C++</a><small>6</small></li>
   
     <li><a href="/categories/Computer-Vision/">Computer Vision</a><small>3</small></li>
   
